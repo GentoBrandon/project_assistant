@@ -4,7 +4,7 @@
  */
 
 const db = require('../models/db');
-
+//create table
 exports.up = function(knex) {
     return knex.schema.hasTable('employed').then(function(exists) {
         if (!exists) {
