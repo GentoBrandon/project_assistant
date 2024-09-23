@@ -3,9 +3,12 @@ const knex = require('../models/db');
 
 // Create new employed
 const createEmployed = [
-    body('definition').notEmpty(),
-    body('date').notEmpty(),
-    body('state').notEmpty().isIn(['Urgente', 'Medio', 'Parcial']),
+    body('name').notEmpty(),
+    body('last_name').notEmpty(),
+    body('dpi').notEmpty(),
+    body('number_IGGS'),
+    body('phone_number'),
+    body('number_NIT'),
     async (req, res) => {
       const errors = validationResult(req);
     
@@ -14,7 +17,7 @@ const createEmployed = [
       }
       
       try {
-        await knex('lista').insert({
+        await knex('employed').insert({
           definition: req.body.definition,
           date: req.body.date,
           state: req.body.state,
