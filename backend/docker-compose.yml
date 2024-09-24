@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    image: node:16
+    container_name: my_app
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm start
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - DB_HOST= localhost
+      - DB_PORT=5432
+      - DB_USER= project_AII
+      - DB_PASSWORD= 12345
+      - DB_NAME= database_assistant 
+
+  db:
+    image: postgres:13
+    container_name: database
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=project_AII
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=database_assistant
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
