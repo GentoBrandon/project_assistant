@@ -1,5 +1,6 @@
 const express = require('express');
 const routerEmployed = require('./routes/employedRoutes');
+const { errorHandling } = require('./middleware/errorHandling');
 class App {
   #app;
   #_PORT;
@@ -10,9 +11,11 @@ class App {
   #settings() {
     this.#app.use(express.json());
   }
-  #middleware() {}
+  #middleware() {
+    this.#app.use(errorHandling);
+  }
   #setRoutes() {
-    this.#app.use('/api', routerEmployed);
+    this.#app.use('/api/employed', routerEmployed);
   }
   async init() {
     this.#settings();

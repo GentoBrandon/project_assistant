@@ -5,6 +5,7 @@ const insertData = async (body) => {
     await knex('employed').insert({
       name: body.name,
       last_name: body.last_name,
+      direction: body.direction,
       dpi: body.dpi,
       number_IGGS: body.number_IGGS,
       phone_number: body.phone_number,
@@ -29,15 +30,10 @@ const getData = async () => {
 
 const deleteEmployed = async (id) => {
   try {
-    // Buscar si el usuario existe
-    const userFound = await knex('employed').where({ id }).select('id').first(); // Usar .first() para obtener el primer resultado
-
-    // Validar si el usuario no fue encontrado
-    if (!userFound) {
-      return { success: false, msg: 'User not found' }; // Usuario no encontrado
+    const {success} = await searchEmployed(id)//knex('employed').where({ id }).select('id').first(); // Usar .first() para obtener el primer resultado
+    if (!success) {
+      return { success: false, msg: 'User already was deleted' }; // Usuario no encontrado
     }
-
-    // Eliminar al usuario si fue encontrado
     await knex('employed').where({ id }).del();
     return { success: true, msg: 'User deleted successfully' };
   } catch (err) {
@@ -56,9 +52,29 @@ const searchEmployed = async (id) => {
     return { success: false, error: err };
   }
 };
+const updateEmployee = async(body,id)=>{
+  try{
+    const updateData = {}; // Objeto para almacenar los campos a actualizar
+
+    // Solo agregar los campos presentes en el body a updateData
+    if (body.name) updateData.name = body.name;
+    if (body.last_name) updateData.last_name = body.last_name;
+    if (body.direction) updateData.direction = body.direction;
+    if (body.dpi) updateData.dpi = body.dpi;
+    if (body.number_IGGS) updateData.number_IGGS = body.number_IGGS;
+    if (body.phone_number) updateData.phone_number = body.phone_number;
+    if (body.number_NIT) updateData.number_NIT = body.number_NIT;
+
+      await knex('employed').where({id}).update(updateData);
+      return {success:true};
+  }catch(error){
+    return {success : false};
+  }
+}
 module.exports = {
   insertData,
   getData,
   deleteEmployed,
   searchEmployed,
+  updateEmployee
 };

@@ -5,12 +5,14 @@ const insertData = async (body) => {
     console.log('Ingresando');
     const result = await employedModel.insertData(body);
     if (!result.success) {
-      throw new Error('Error al insertar ');
+      const error = new Error('Error al insertar');
+      error.status = 400;
+      throw error;
     }
     console.log('Empleado Ingresado Ingresado');
     return { status: 200, msg: 'Empleado Registrado con exito' };
-  } catch (e) {
-    return { status: 500, msg: e.message };
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -18,43 +20,39 @@ const getData = async () => {
   try {
     console.log('Extrayendo datos de empleados.');
     const result = await employedModel.getData();
-
-    if (!result.success) {
-      throw new Error('Error al extraer datos.');
+    
+    if (!result.success || result.data.length===0) {
+      console.log('hubo un error o no hay empleados')
+      const error = new Error('Data not Found');
+      error.status = 404;
+      error.details = 'the database is empty'
+      throw error;
     }
 
     return { status: 200, msg: 'Empleados encontrados', data: result.data };
   } catch (error) {
-    console.log(error);
-    return { status: 500, msg: error.message };
+    throw error;
   }
 };
 const deleteEmployed = async (params) => {
   try {
-    // Convertir el ID a número
     const id = Number(params.id);
-
-    // Validar que el ID sea un número válido
     if (isNaN(id) || id <= 0) {
-      return { status: 400, msg: 'ID inválido proporcionado' };
+      const error = new Error('invalid ID provided');
+      error.status = 400;
+      throw error;
     }
-
-    console.log(`Eliminando empleado con ID: ${id}`);
-
-    // Llamar al modelo para eliminar el empleado
+   
     const result = await employedModel.deleteEmployed(id);
-
-    // Verificar si el proceso de eliminación fue exitoso
     if (!result.success) {
-      return { status: 404, msg: result.msg }; // Empleado no encontrado o error
+      const error = new Error(result.msg);
+      error.status = 400;
+      throw error;
     }
-
-    // Retornar respuesta exitosa
+    console.log(`Eliminando empleado con ID: ${id}`);
     return { status: 200, msg: result.msg };
   } catch (error) {
-    // Manejo de errores
-    console.error(`Error al eliminar el empleado con ID: ${params.id}`, error);
-    return { status: 500, msg: 'Falló el servidor' };
+    throw error;
   }
 };
 
@@ -62,17 +60,35 @@ const searchEmployed = async (id) => {
   try {
     const result = await employedModel.searchEmployed(id);
     if (!result.success) {
-      throw new Error('Error no se encontro el usuario');
+      const error = new Error('User not Found Error');
+      error.status = 400;
+      error.message =
+        'User count find because doesnt be registered or is deleted';
+      throw error;
     }
-    return { success: true, status: 200, data: result.data };
+    return { status: 200, data: result.data };
   } catch (error) {
-    return { success: false, status: 500, msg: error.message };
+    throw error;
   }
 };
+const updateEmployee = async(body,id)=>{
+  try {
+    const result = await employedModel.updateEmployee(body,id);
+    if(!result.success){
+      const error = new Error('Update Employed Error');
+      error.status = 400;
+      throw error;
+    }
+    return {status:200,msg: 'employed updated successfully'};
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
   insertData,
   getData,
   deleteEmployed,
   searchEmployed,
+  updateEmployee
 };

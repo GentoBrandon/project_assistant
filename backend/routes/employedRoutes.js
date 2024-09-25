@@ -4,55 +4,92 @@ const {
   insertData,
   getData,
   searchEmployed,
+  updateEmployee
 } = require('../controllers/employedController');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const validatorData = require('../middleware/validateDataInput');
-//router.post('/crear', createEmployed);
 
-router.post('/crear', validatorData.SingUpCheck(), async (req, res) => {
+router.post('/crear', validatorData.SingUpCheck(), async (req, res, next) => {
   const resultsData = validationResult(req);
   if (!resultsData.isEmpty()) {
     console.log('field Empty');
-    return res.status(400).json({ errors: resultsData.array() });
+    const error = new Error('Validation Error');
+    error.status = 400;
+    error.details = resultsData.array();
+    return next(error);
   }
   try {
     const result = await insertData(req.body);
     return res.status(result.status).json({ msg: result.msg });
-  } catch (e) {
-    return res.status(500).json({ msg: 'Error al Servidor' });
+  } catch (error) {
+    next(error);
   }
 });
 
-router.get('/viewEmployed', async (req, res) => {
+router.get('/viewEmployed', async (req, res, next) => {
   try {
-    const result = await getData(); // Obtiene el resultado del controlador
+    const result = await getData();
     return res.status(result.status).json({ data: result.data });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ msg: 'Server error' });
+    next(error);
   }
 });
 
-router.delete('/deleteEmployed/:id', async (req, res) => {
+router.delete('/deleteEmployed/:id', validatorData.inputId(),async (req, res, next) => {
+  const resultsData = validationResult(req);
+  if (!resultsData.isEmpty()) {
+    console.log('field Empty');
+    const error = new Error('Validation Error');
+    error.status = 400;
+    error.details = resultsData.array();
+    return next(error);
+  }
   try {
     const result = await deleteEmployed(req.params);
     return res.status(result.status).json({ msg: result.msg });
   } catch (error) {
-    return res.status(result.status).json({ msg: result.msg });
+    next(error);
   }
 });
-
-router.get('/searchEmployed/:id', async (req, res) => {
+router.get('/searchEmployed/:id',validatorData.inputId(), async (req, res, next) => {
+  const resultsData = validationResult(req);
+  if (!resultsData.isEmpty()) {
+    console.log('field Empty');
+    const error = new Error('Validation Error');
+    error.status = 400;
+    error.details = resultsData.array();
+    return next(error);
+  }
   try {
     const { id } = req.params;
     const result = await searchEmployed(id);
-    if (!result.success) {
-      throw new Error('No se pudo Buscar');
-    }
     return res.status(result.status).json({ data: result.data });
-  } catch (err) {
-    return res.status(500).json({ msg: err.message });
+  } catch (error) {
+    next(error);
   }
 });
+
+router.patch('/updateEmployed/:id',validatorData.inputId(),async(req,res,next)=>{
+  const resultsData = validationResult(req);
+  if (!resultsData.isEmpty()) {
+    console.log('field Empty');
+    const error = new Error('Validation Error');
+    error.status = 400;
+    error.details = resultsData.array();
+    return next(error);
+  }
+  try{
+       const {id} = req.params
+      const result = await updateEmployee(req.body,id);
+      return res.status(result.status).json({
+        msg:result.msg
+      })
+  }catch(error){
+    next(error);
+  }
+})
+
+
+
 module.exports = router;
