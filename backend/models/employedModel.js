@@ -1,4 +1,4 @@
-const knex = require('../models/db');
+const knex = require('../database/db');
 
 const insertData = async(body)=> {
     try{
@@ -29,20 +29,37 @@ const getData = async() =>{
 
 const deleteEmployed = async (id) => {
     try {
-      const rowsDeleted = await knex('employed').where({ id }).del(); // Eliminar empleado por su id
-      if (rowsDeleted === 0) {
-        return { success: false, msg: 'No se encontró el empleado con el ID especificado.' };
+      // Buscar si el usuario existe
+      const userFound = await knex('employed').where({ id }).select('id').first(); // Usar .first() para obtener el primer resultado
+  
+      // Validar si el usuario no fue encontrado
+      if (!userFound) {
+        return { success: false, msg: 'User not found' }; // Usuario no encontrado
       }
-      return { success: true, msg: 'Empleado eliminado correctamente.' };
-    } catch (error) {
-      console.log(error);
-      return { success: false, error: error.message };
+  
+      // Eliminar al usuario si fue encontrado
+      await knex('employed').where({ id }).del();
+      return { success: true, msg: 'User deleted successfully' };
+  
+    } catch (err) {
+      console.error(err);
+      return { success: false, msg: 'User not deleted' };
     }
-};
-
-
+  };
+  const searchEmployed = async (id)=>{
+    try{
+      const result = await knex('employed').where({id}).select('*').first();
+      if(!result){
+        return {success: false};
+      }
+      return {success: true,data: result}
+    }catch(err){
+        return {success:false,error : err};
+    }
+  }
 module.exports={
     insertData,
     getData,
-    deleteEmployed
+    deleteEmployed,
+    searchEmployed
 };

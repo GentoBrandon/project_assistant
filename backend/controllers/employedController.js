@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+
 const employedModel = require('../models/employedModel')
 
 const insertData = async(body)=>{
@@ -30,27 +30,53 @@ const getData = async () => {
     return { status: 500, msg: error.message };
   }
 };
-
-const deleteEmployed = async (req, res) => {
-  const { id } = req.params; // Obtener el id de los parámetros de la URL
+const deleteEmployed = async (params) => {
   try {
-    console.log(`Eliminando empleado con ID: ${id}`);
-    const result = await employedModel.deleteEmployed(id);
+    // Convertir el ID a número
+    const id = Number(params.id);
 
-    if (!result.success) {
-      throw new Error('Error al eliminar.');
+    // Validar que el ID sea un número válido
+    if (isNaN(id) || id <= 0) {
+      return { status: 400, msg: 'ID inválido proporcionado' };
     }
 
-    return res.status(200).json({ status: 200, msg: result.msg });
+    console.log(`Eliminando empleado con ID: ${id}`);
+
+    // Llamar al modelo para eliminar el empleado
+    const result = await employedModel.deleteEmployed(id);
+
+    // Verificar si el proceso de eliminación fue exitoso
+    if (!result.success) {
+      return { status: 404, msg: result.msg }; // Empleado no encontrado o error
+    }
+
+    // Retornar respuesta exitosa
+    return { status: 200, msg: result.msg };
+
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ status: 500, msg: error.message });
+    // Manejo de errores
+    console.error(`Error al eliminar el empleado con ID: ${params.id}`, error);
+    return { status: 500, msg: 'Falló el servidor' };
   }
 };
+
+const searchEmployed = async(id)=>{
+    
+    try {
+      const result = await employedModel.searchEmployed(id);
+      if(!result.success){
+        throw new Error('Error no se encontro el usuario')
+      }
+      return {success: true,status: 200,data: result.data};
+    } catch (error) {
+      return {success: false ,status:500,msg : error.message};
+    }
+}
 
   module.exports = {
     insertData,
     getData,
-    deleteEmployed
+    deleteEmployed,
+    searchEmployed
   };
   

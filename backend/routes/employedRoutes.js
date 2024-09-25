@@ -1,16 +1,22 @@
 const express = require('express');
-const {deleteEmployed,insertData, getData} = require('../controllers/employedController');
+const {deleteEmployed,insertData, getData,searchEmployed} = require('../controllers/employedController');
 const router = express.Router();
-
+const {body,validationResult} = require('express-validator')
+const validatorData = require('../middleware/validateDataInput')
 //router.post('/crear', createEmployed);
 
-router.post('/crear', async(req, res)=>{
+router.post('/crear', validatorData.SingUpCheck(),async(req, res)=>{
+    const resultsData = validationResult(req);
+    if(!resultsData.isEmpty()){
+        console.log('field Empty')
+        return res.status(400).json({ errors: resultsData.array() })
+    }
     try {
        const result=  await insertData(req.body);
         return res.status(result.status).json({msg: result.msg});
 
     } catch (e) {
-        return res.status(500).json({msg: result.msg});
+        return res.status(500).json({msg: 'Error al Servidor'});
         
     }
 });
@@ -28,11 +34,23 @@ router.get('/viewEmployed', async (req, res) => {
 
 router.delete('/deleteEmployed/:id', async (req, res) => {
     try {
-        await deleteEmployed(req, res);
-        return res.status(200).json({msg : 'Eliminado exitosamente'});
+         const result =  await deleteEmployed(req.params);
+        return res.status(result.status).json({msg : result.msg})
     } catch (error) {
-        return res.status(500).json({ msg: 'Server error' });
+        return res.status(result.status).json({msg : result.msg})
     }
 });
 
+router.get('/searchEmployed/:id', async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const result = await searchEmployed(id);
+        if(!result.success){
+            throw new Error('No se pudo Buscar');
+        }
+        return res.status(result.status).json({data : result.data});
+    }catch(err){
+        return res.status(500).json({msg: err.message});
+    }
+})
 module.exports = router;
