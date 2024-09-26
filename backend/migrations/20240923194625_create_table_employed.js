@@ -12,7 +12,7 @@ exports.up = function (knex) {
         table.increments('id').unique();
         table.string('name').notNullable();
         table.string('last_name').notNullable();
-        table.string('direction')
+        table.string('direction');
         table.string('dpi').unique().notNullable();
         table.string('number_IGGS').unique().notNullable();
         table.string('phone_number').notNullable();
@@ -27,9 +27,9 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.hasTable('employed').then(function(exist){
-    if(exist){
+  return knex.schema.hasTable('employed').then(function (exist) {
+    if (exist) {
       return knex.schema.dropTable('employed');
     }
-  })
+  });
 };

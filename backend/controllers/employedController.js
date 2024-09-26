@@ -20,12 +20,12 @@ const getData = async () => {
   try {
     console.log('Extrayendo datos de empleados.');
     const result = await employedModel.getData();
-    
-    if (!result.success || result.data.length===0) {
-      console.log('hubo un error o no hay empleados')
+
+    if (!result.success || result.data.length === 0) {
+      console.log('hubo un error o no hay empleados');
       const error = new Error('Data not Found');
       error.status = 404;
-      error.details = 'the database is empty'
+      error.details = 'the database is empty';
       throw error;
     }
 
@@ -42,7 +42,7 @@ const deleteEmployed = async (params) => {
       error.status = 400;
       throw error;
     }
-   
+
     const result = await employedModel.deleteEmployed(id);
     if (!result.success) {
       const error = new Error(result.msg);
@@ -71,24 +71,24 @@ const searchEmployed = async (id) => {
     throw error;
   }
 };
-const updateEmployee = async(body,id)=>{
+const updateEmployee = async (body, id) => {
   try {
-    const result = await employedModel.updateEmployee(body,id);
-    if(!result.success){
+    const result = await employedModel.updateEmployee(body, id);
+    if (!result.success) {
       const error = new Error('Update Employed Error');
       error.status = 400;
       throw error;
     }
-    return {status:200,msg: 'employed updated successfully'};
+    return { status: 200, msg: 'employed updated successfully' };
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
   insertData,
   getData,
   deleteEmployed,
   searchEmployed,
-  updateEmployee
+  updateEmployee,
 };

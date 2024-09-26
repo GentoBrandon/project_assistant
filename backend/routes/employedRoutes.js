@@ -4,7 +4,7 @@ const {
   insertData,
   getData,
   searchEmployed,
-  updateEmployee
+  updateEmployee,
 } = require('../controllers/employedController');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
@@ -36,60 +36,70 @@ router.get('/viewEmployed', async (req, res, next) => {
   }
 });
 
-router.delete('/deleteEmployed/:id', validatorData.inputId(),async (req, res, next) => {
-  const resultsData = validationResult(req);
-  if (!resultsData.isEmpty()) {
-    console.log('field Empty');
-    const error = new Error('Validation Error');
-    error.status = 400;
-    error.details = resultsData.array();
-    return next(error);
+router.delete(
+  '/deleteEmployed/:id',
+  validatorData.inputId(),
+  async (req, res, next) => {
+    const resultsData = validationResult(req);
+    if (!resultsData.isEmpty()) {
+      console.log('field Empty');
+      const error = new Error('Validation Error');
+      error.status = 400;
+      error.details = resultsData.array();
+      return next(error);
+    }
+    try {
+      const result = await deleteEmployed(req.params);
+      return res.status(result.status).json({ msg: result.msg });
+    } catch (error) {
+      next(error);
+    }
   }
-  try {
-    const result = await deleteEmployed(req.params);
-    return res.status(result.status).json({ msg: result.msg });
-  } catch (error) {
-    next(error);
+);
+router.get(
+  '/searchEmployed/:id',
+  validatorData.inputId(),
+  async (req, res, next) => {
+    const resultsData = validationResult(req);
+    if (!resultsData.isEmpty()) {
+      console.log('field Empty');
+      const error = new Error('Validation Error');
+      error.status = 400;
+      error.details = resultsData.array();
+      return next(error);
+    }
+    try {
+      const { id } = req.params;
+      const result = await searchEmployed(id);
+      return res.status(result.status).json({ data: result.data });
+    } catch (error) {
+      next(error);
+    }
   }
-});
-router.get('/searchEmployed/:id',validatorData.inputId(), async (req, res, next) => {
-  const resultsData = validationResult(req);
-  if (!resultsData.isEmpty()) {
-    console.log('field Empty');
-    const error = new Error('Validation Error');
-    error.status = 400;
-    error.details = resultsData.array();
-    return next(error);
-  }
-  try {
-    const { id } = req.params;
-    const result = await searchEmployed(id);
-    return res.status(result.status).json({ data: result.data });
-  } catch (error) {
-    next(error);
-  }
-});
+);
 
-router.patch('/updateEmployed/:id',validatorData.inputId(),async(req,res,next)=>{
-  const resultsData = validationResult(req);
-  if (!resultsData.isEmpty()) {
-    console.log('field Empty');
-    const error = new Error('Validation Error');
-    error.status = 400;
-    error.details = resultsData.array();
-    return next(error);
-  }
-  try{
-       const {id} = req.params
-      const result = await updateEmployee(req.body,id);
+router.patch(
+  '/updateEmployed/:id',
+  validatorData.inputId(),
+  async (req, res, next) => {
+    const resultsData = validationResult(req);
+    if (!resultsData.isEmpty()) {
+      console.log('field Empty');
+      const error = new Error('Validation Error');
+      error.status = 400;
+      error.details = resultsData.array();
+      return next(error);
+    }
+    try {
+      const { id } = req.params;
+      const result = await updateEmployee(req.body, id);
       return res.status(result.status).json({
-        msg:result.msg
-      })
-  }catch(error){
-    next(error);
+        msg: result.msg,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-})
-
-
+);
 
 module.exports = router;

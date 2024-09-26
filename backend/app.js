@@ -1,5 +1,6 @@
 const express = require('express');
 const routerEmployed = require('./routes/employedRoutes');
+const routerLots = require('./routes/lotsRoutes');
 const { errorHandling } = require('./middleware/errorHandling');
 class App {
   #app;
@@ -16,6 +17,7 @@ class App {
   }
   #setRoutes() {
     this.#app.use('/api/employed', routerEmployed);
+    this.#app.use('/api/lots', routerLots);
   }
   async init() {
     this.#settings();

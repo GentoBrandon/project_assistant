@@ -30,7 +30,7 @@ const getData = async () => {
 
 const deleteEmployed = async (id) => {
   try {
-    const {success} = await searchEmployed(id)//knex('employed').where({ id }).select('id').first(); // Usar .first() para obtener el primer resultado
+    const { success } = await searchEmployed(id); //knex('employed').where({ id }).select('id').first(); // Usar .first() para obtener el primer resultado
     if (!success) {
       return { success: false, msg: 'User already was deleted' }; // Usuario no encontrado
     }
@@ -52,8 +52,12 @@ const searchEmployed = async (id) => {
     return { success: false, error: err };
   }
 };
-const updateEmployee = async(body,id)=>{
-  try{
+const updateEmployee = async (body, id) => {
+  try {
+    const { success } = await searchEmployed(id); //knex('employed').where({ id }).select('id').first(); // Usar .first() para obtener el primer resultado
+    if (!success) {
+      return { success: false }; // Usuario no encontrado
+    }
     const updateData = {}; // Objeto para almacenar los campos a actualizar
 
     // Solo agregar los campos presentes en el body a updateData
@@ -65,16 +69,16 @@ const updateEmployee = async(body,id)=>{
     if (body.phone_number) updateData.phone_number = body.phone_number;
     if (body.number_NIT) updateData.number_NIT = body.number_NIT;
 
-      await knex('employed').where({id}).update(updateData);
-      return {success:true};
-  }catch(error){
-    return {success : false};
+    await knex('employed').where({ id }).update(updateData);
+    return { success: true };
+  } catch (error) {
+    return { success: false };
   }
-}
+};
 module.exports = {
   insertData,
   getData,
   deleteEmployed,
   searchEmployed,
-  updateEmployee
+  updateEmployee,
 };

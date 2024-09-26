@@ -1,4 +1,4 @@
-const { body, param} = require('express-validator');
+const { body, param } = require('express-validator');
 const SingUpCheck = () => {
   return [
     body('name')
@@ -12,15 +12,14 @@ const SingUpCheck = () => {
     body('number_IGGS').trim().not().isEmpty().isString(),
     body('phone_number').trim().not().isEmpty().isString(),
     body('number_NIT').trim().not().isEmpty().isString(),
+    param('id').isNumeric().withMessage('ID is must a valid number'),
   ];
 };
 
-const inputId = ()=>{
-  return [
-    param('id').isNumeric().withMessage('ID is must a valid number')
-  ]
-}
+const inputId = () => {
+  return [param('id').isNumeric().withMessage('ID is must a valid number')];
+};
 module.exports = {
   SingUpCheck,
-  inputId
+  inputId,
 };
