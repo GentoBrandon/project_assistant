@@ -8,7 +8,7 @@ const {
 } = require('../controllers/employedController');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const validatorData = require('../middleware/validataEmployedInput');
+const validatorData = require('../validators/validataEmployedInput');
 
 router.post('/crear', validatorData.SingUpCheck(), async (req, res, next) => {
   const resultsData = validationResult(req);

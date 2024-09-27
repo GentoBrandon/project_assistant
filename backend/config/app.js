@@ -1,7 +1,7 @@
 const express = require('express');
-const routerEmployed = require('./routes/employedRoutes');
-const routerLots = require('./routes/lotsRoutes');
-const { errorHandling } = require('./middleware/errorHandling');
+const routerEmployed = require('../apiEmployed/routes/employedRoutes');
+const routerLots = require('../apiLots/routes/lotsRoutes');
+const { errorHandling } = require('../middleware/errorHandling');
 class App {
   #app;
   #_PORT;

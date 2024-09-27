@@ -1,4 +1,4 @@
-const knex = require('../database/db');
+const knex = require('../../config/db');
 
 const getData = async () => {
   try {
