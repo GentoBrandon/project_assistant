@@ -4,10 +4,10 @@ export default function FormRegister(){
     return (
         <form>
                 <div className={styles.inputGroup}>
-                    <InputDataLayout id="userName" type="text" placeholder="Enter your UserName" label="Usuario" />
+                    <InputDataLayout id="userName" type="text" placeholder="Ingrese su nombre" label="Usuario" />
                 </div>
                 <div className={styles.inputGroup}>
-                    <InputDataLayout id="userName" type="password" placeholder="Enter your UserName" label="Usuario"/>
+                    <InputDataLayout id="passw" type="password" placeholder="Ingrese su contraseña" label="Contraseña"/>
                 </div>
                 <a href="#" className={styles.forgotPassword}>
                     ¿Olvidó su contraseña?
