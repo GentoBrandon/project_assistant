@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const lotsController = require('../controllers/lotsController');
-
+const validator = require('../validators/validateDataInput');
+const {validationResult} = require('express-validator')
 // GET all lots
 router.get('/getData', async (req, res, next) => {
   try {
@@ -13,7 +14,13 @@ router.get('/getData', async (req, res, next) => {
 });
 
 // GET lot by ID
-router.get('/getData/:id', async (req, res, next) => {
+router.get('/getData/:id',validator.validateInputId(), async (req, res, next) => {
+  const resultinput = validationResult(req);
+  if(!resultinput.isEmpty()){
+    const error = new Error('Input ID Error');
+    error.details = resultinput.array();
+    return next(error);
+  }
   try {
     const result = await lotsController.getDataById(req.params.id);
     return res.status(result.status).json({ data: result.data });
@@ -23,7 +30,13 @@ router.get('/getData/:id', async (req, res, next) => {
 });
 
 // POST new lot
-router.post('/insertData', async (req, res, next) => {
+router.post('/insertData', validator.checkInputData(),async (req, res, next) => {
+  const resultInput = validationResult(req);
+  if(!resultInput.isEmpty()){
+    const error = new Error('Data input Error');
+    error.details = resultInput.array();
+    return next(error);
+  }
   try {
     const result = await lotsController.insertData(req.body);
     return res.status(result.status).json({ message: result.data });
@@ -33,7 +46,13 @@ router.post('/insertData', async (req, res, next) => {
 });
 
 // PUT update lot
-router.put('/updateData/:id', async (req, res, next) => {
+router.put('/updateData/:id', validator.validateDataUpdate(),async (req, res, next) => {
+  const resultInput = validationResult(req);
+  if(!resultInput.isEmpty()){
+    const error = new Error('Error Data Input');
+    error.details = resultInput.array();
+    return next(error);
+  }
   try {
     const result = await lotsController.updateData(req.params.id, req.body);
     return res.status(result.status).json({ message: result.data });
@@ -43,7 +62,7 @@ router.put('/updateData/:id', async (req, res, next) => {
 });
 
 // DELETE lot
-router.delete('/deleteData/:id', async (req, res, next) => {
+router.delete('/deleteData/:id',validator.validateInputId(), async (req, res, next) => {
   try {
     const result = await lotsController.deleteData(req.params.id);
     return res.status(result.status).json({ message: result.data });
