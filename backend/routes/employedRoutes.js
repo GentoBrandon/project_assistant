@@ -8,7 +8,7 @@ const {
 } = require('../controllers/employedController');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const validatorData = require('../middleware/validateDataInput');
+const validatorData = require('../middleware/validataEmployedInput');
 
 router.post('/crear', validatorData.SingUpCheck(), async (req, res, next) => {
   const resultsData = validationResult(req);
@@ -80,7 +80,7 @@ router.get(
 
 router.patch(
   '/updateEmployed/:id',
-  validatorData.inputId(),
+  validatorData.checkInputsOptionalEmployed(),
   async (req, res, next) => {
     const resultsData = validationResult(req);
     if (!resultsData.isEmpty()) {
