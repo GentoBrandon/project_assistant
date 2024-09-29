@@ -1,4 +1,5 @@
 // src/app/login/page.js
+'use client';
 import styles from '../../styles/Login.module.css';
 import FormRegister from '@/components/template/formRegister/FormTemplate';
 export default function LoginPage() {
