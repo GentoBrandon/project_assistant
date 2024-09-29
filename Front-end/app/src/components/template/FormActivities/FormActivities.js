@@ -18,7 +18,10 @@ function Activities(){
     };
     return (
         <Form className={Styles.form} noValidate validated={validated} onSubmit={handleSubmit}>
-            <InputDataII type="text" name="Actividad" placeholder="Ingrese la actividad" />
+            <InputDataII type="text" 
+            name="Actividad" 
+            placeholder="Ingrese la actividad" 
+            Feedback="Ingrese la actividad correctamente."/>
             <Buttons className="btn btn-primary" type="submit" content="Enviar" /> 
         </Form>
     )
