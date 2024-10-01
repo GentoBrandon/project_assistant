@@ -1,7 +1,7 @@
 const e = require('express');
 const activitiesModel = require('../models/activityModel');
 const validateActivity = require('../validators/inputValidate');
-const {validationResult} = require('express-validator')
+const { validationResult } = require('express-validator');
 const getData = async (req, res, next) => {
   try {
     const resultData = await activitiesModel.getData();
@@ -17,11 +17,11 @@ const getData = async (req, res, next) => {
 };
 const insertData = async (req, res, next) => {
   const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    const error = new Error()
-    error.status= 400;
-    error.stack= errors.array();
-    error.message = errors.array()
+  if (!errors.isEmpty()) {
+    const error = new Error();
+    error.status = 400;
+    error.stack = errors.array();
+    error.message = errors.array();
     return next(error);
   }
   try {
@@ -39,11 +39,11 @@ const insertData = async (req, res, next) => {
 
 const searchData = async (req, res, next) => {
   const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    const error = new Error()
-    error.status= 400;
-    error.details = 'The input value is incorrect'
-    error.message = errors.array()
+  if (!errors.isEmpty()) {
+    const error = new Error();
+    error.status = 400;
+    error.details = 'The input value is incorrect';
+    error.message = errors.array();
     return next(error);
   }
   try {
@@ -61,11 +61,11 @@ const searchData = async (req, res, next) => {
 };
 const deletActivity = async (req, res, next) => {
   const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    const error = new Error()
-    error.status= 400;
-    error.details = 'The input value is incorrect'
-    error.message = errors.array()
+  if (!errors.isEmpty()) {
+    const error = new Error();
+    error.status = 400;
+    error.details = 'The input value is incorrect';
+    error.message = errors.array();
     return next(error);
   }
   try {
@@ -82,33 +82,33 @@ const deletActivity = async (req, res, next) => {
   }
 };
 
-const updateActivity = async(req,res,next)=>{
+const updateActivity = async (req, res, next) => {
   const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    const error = new Error()
-    error.status= 400;
-    error.details = 'The input value is incorrect'
-    error.message = errors.array()
+  if (!errors.isEmpty()) {
+    const error = new Error();
+    error.status = 400;
+    error.details = 'The input value is incorrect';
+    error.message = errors.array();
     return next(error);
   }
-  try{
-    const {id} = req.params
-  
-      const returnData = await activitiesModel.updateActivity(id,req.body);
-      if(!returnData.success){
-        const error = new Error(returnData.msg);
+  try {
+    const { id } = req.params;
+
+    const returnData = await activitiesModel.updateActivity(id, req.body);
+    if (!returnData.success) {
+      const error = new Error(returnData.msg);
       error.status = 404;
       throw error;
-      }
-      return res.status(200).json({msg:returnData.msg});
-  }catch(error){
+    }
+    return res.status(200).json({ msg: returnData.msg });
+  } catch (error) {
     next(error);
   }
-}
+};
 module.exports = {
   getData,
   insertData,
   searchData,
   deletActivity,
-  updateActivity
+  updateActivity,
 };

@@ -99,40 +99,38 @@ const deleteActivity = async (id) => {
   }
 };
 
-const updateActivity = async(id,body)=>{
-  try{
+const updateActivity = async (id, body) => {
+  try {
     const activityFound = await searchData(id);
-    if(!activityFound.success){
+    if (!activityFound.success) {
       return {
-        success : false,
-        msg: 'Activity not found'
-      }
+        success: false,
+        msg: 'Activity not found',
+      };
     }
-    const activityUpdated = await knex('activities')
-    .where({ id })
-    .update({
-        name_acitivity: body.name_acitivity
+    const activityUpdated = await knex('activities').where({ id }).update({
+      name_acitivity: body.name_acitivity,
     });
-   
-    if(activityUpdated === 0){
+
+    if (activityUpdated === 0) {
       return {
-        success : false,
-        msg: 'Activity not found or not updated'
-      }
+        success: false,
+        msg: 'Activity not found or not updated',
+      };
     }
-    return {success: true,msg:'Activity updated successfully'};
-  }catch(error){
+    return { success: true, msg: 'Activity updated successfully' };
+  } catch (error) {
     console.log('Error while updating activity', error);
     throw {
       message: 'Error while updating activity',
       stack: error.stack,
     };
   }
-}
+};
 module.exports = {
   getData,
   insertData,
   searchData,
   deleteActivity,
-  updateActivity
+  updateActivity,
 };
