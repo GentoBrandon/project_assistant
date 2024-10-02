@@ -1,12 +1,9 @@
 const express = require('express');
-const cors = require('cors');
-const app = express();
-const routes = require('./routes/routes');
+const routes = express.Router();
 
-app.use(express.json());
-app.use(cors());
+
 
 // Usar las rutas de tareas
-app.use('/api');
+routes.use('/api', routes);
 
-module.exports = app;
+module.exports = routes;

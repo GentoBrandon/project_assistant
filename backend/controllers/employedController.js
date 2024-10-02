@@ -1,32 +1,56 @@
 const { body, validationResult } = require('express-validator');
-const knex = require('../models/db');
+const employedModel = require('../models/employedModel')
 
-// Create new employed
-const createEmployed = [
-    body('name').notEmpty(),
-    body('last_name').notEmpty(),
-    body('dpi').notEmpty(),
-    body('number_IGGS'),
-    body('phone_number'),
-    body('number_NIT'),
-    async (req, res) => {
-      const errors = validationResult(req);
-    
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+const insertData = async(body)=>{
+    try {
+      console.log("Ingresando");
+      const result = await employedModel.insertData(body);
+      if(!result.success){
+          throw new Error('Error al insertar ')
       }
-      
-      try {
-        await knex('employed').insert({
-          definition: req.body.definition,
-          date: req.body.date,
-          state: req.body.state,
-        });
-    
-        return res.status(201).json({ msg: 'Task stored successfully' });
+        console.log("Empleado Ingresado Ingresado");
+        return {status: 200,msg: 'Empleado Registrado con exito'}
       } catch (e) {
-        return res.status(500).json({ msg: 'Internal Server Error.' });
-      }
+        return {status: 500,msg:e.message};
+      }    
+}
+
+const getData = async () => {
+  try {
+    console.log("Extrayendo datos de empleados.");
+    const result = await employedModel.getData();
+
+    if (!result.success) {
+      throw new Error('Error al extraer datos.');
     }
-  ];
+
+    return { status: 200, msg: 'Empleados encontrados', data:result.data };
+  } catch (error) {
+    console.log(error);
+    return { status: 500, msg: error.message };
+  }
+};
+
+const deleteEmployed = async (req, res) => {
+  const { id } = req.params; // Obtener el id de los parámetros de la URL
+  try {
+    console.log(`Eliminando empleado con ID: ${id}`);
+    const result = await employedModel.deleteEmployed(id);
+
+    if (!result.success) {
+      throw new Error('Error al eliminar.');
+    }
+
+    return res.status(200).json({ status: 200, msg: result.msg });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 500, msg: error.message });
+  }
+};
+
+  module.exports = {
+    insertData,
+    getData,
+    deleteEmployed
+  };
   
