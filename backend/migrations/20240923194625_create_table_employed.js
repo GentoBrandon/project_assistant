@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
 
-const db = require('../database/db');
+
 //create table
 exports.up = function (knex) {
   return knex.schema.hasTable('employed').then(function (exists) {
