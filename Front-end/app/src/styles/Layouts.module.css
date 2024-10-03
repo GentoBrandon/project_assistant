@@ -1,0 +1,4 @@
+/* Oculta el triángulo del dropdown */
+.caret .dropdown-toggle::after {
+  display: none;
+}
