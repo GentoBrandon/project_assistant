@@ -48,13 +48,13 @@ function NavPrincipal() {
             </NavDropdown>
 
             <NavDropdown title="Registrar" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/registerEmployed">
+              <NavDropdown.Item href="/registers/registerEmployed">
                 Empleados
               </NavDropdown.Item>
-              <NavDropdown.Item href="/registerLots">
+              <NavDropdown.Item href="/registers/registerLots">
               Lotes
               </NavDropdown.Item>
-              <NavDropdown.Item href="/activities">
+              <NavDropdown.Item href="/registers/activities">
                 Actividad
               </NavDropdown.Item>
             </NavDropdown>
