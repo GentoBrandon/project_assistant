@@ -14,14 +14,14 @@ const verifyToken = async (req, res, next) => {
 
     // Verificar el token de manera asíncrona
     const decoded = await jwt.verify(token, config.secret);
-    
+
     // Guardar el ID del usuario en la solicitud
     req.id = decoded.id;
     req.user_name = decoded.user_name;
     req.role = decoded.role;
-    console.log(req.id)
-    console.log(req.user_name)
-    console.log(req.role)
+    console.log(req.id);
+    console.log(req.user_name);
+    console.log(req.role);
     // Continuar con el siguiente middleware o controlador
     next();
   } catch (error) {

@@ -24,7 +24,7 @@ const getData = async () => {
 const insertData = async (body) => {
   try {
     const resultData = await knex('activities').insert({
-      name_acitivity: body.name_acitivity,
+      name_activity: body.name_acitivity,
     });
 
     if (resultData === 0) {

@@ -15,10 +15,12 @@ class App {
   }
   #settings() {
     this.#app.use(express.json());
-    this.#app.use(cors({
-      origin: 'http://localhost:3000', // El dominio del frontend
-      credentials: true, // Permitir el envío de cookies
-    }));
+    this.#app.use(
+      cors({
+        origin: 'http://localhost:3000', // El dominio del frontend
+        credentials: true, // Permitir el envío de cookies
+      })
+    );
     this.#app.use(express.urlencoded({ extended: true }));
   }
   #middleware() {
