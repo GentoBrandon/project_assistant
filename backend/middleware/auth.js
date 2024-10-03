@@ -17,7 +17,11 @@ const verifyToken = async (req, res, next) => {
     
     // Guardar el ID del usuario en la solicitud
     req.id = decoded.id;
+    req.user_name = decoded.user_name;
+    req.role = decoded.role;
     console.log(req.id)
+    console.log(req.user_name)
+    console.log(req.role)
     // Continuar con el siguiente middleware o controlador
     next();
   } catch (error) {

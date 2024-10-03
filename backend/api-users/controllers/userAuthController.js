@@ -51,15 +51,12 @@ const signIn = async (req, res, next) => {
       error.accessToken = null;
       throw error;
     }
-    const token = jwt.sign({ id: idUser }, configKey.secret, {
+    const token = jwt.sign({ id: idUser,user_name: userFound.data.user_name,role:'user'}, configKey.secret, {
       algorithm: 'HS256',
       allowInsecureKeySizes: true,
       expiresIn: 86400, // Expira en 24 horas
     });
     res.status(200).json({
-      id: idUser,
-      username: userFound.data.user_name,
-      roles: 'user',
       accessToken: token,
     });
   } catch (error) {
