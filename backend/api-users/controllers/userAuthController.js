@@ -3,6 +3,7 @@ const byCript = require('bcryptjs');
 const configKey = require('../../config/auth.config');
 const { validationResult } = require('express-validator');
 const userModel = require('../model/userModel');
+const {serialize} = require('cookie')
 const signUp = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -54,16 +55,31 @@ const signIn = async (req, res, next) => {
     const token = jwt.sign({ id: idUser,user_name: userFound.data.user_name,role:'user'}, configKey.secret, {
       algorithm: 'HS256',
       allowInsecureKeySizes: true,
-      expiresIn: 86400, // Expira en 24 horas
+      expiresIn: 3600, // Expira en 24 horas
     });
-    res.status(200).json({
-      accessToken: token,
+
+    const serealized = serialize('token',token,{
+      httpOnly:true,
+      maxAge:60*60,
+    sameSite:'strict',
+  path:'/'});
+    res.setHeader('Set-Cookie',serealized)
+    return res.status(200).json({
+      msg: 'Login succesfully'
     });
   } catch (error) {
     next(error);
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    
+  } catch (error) {
+    
+  }
+}
 const userContent = (req, res) => {
   res.status(200).send('User Content.');
 };
