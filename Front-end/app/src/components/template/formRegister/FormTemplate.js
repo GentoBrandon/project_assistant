@@ -1,6 +1,6 @@
-import InputDataII from '@/components/layouts/InputData/InputDataII';
+
 import styles from '../../../styles/Login.module.css'
-import { Form } from "react-bootstrap";
+import { Form}  from "react-bootstrap";
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -27,7 +27,7 @@ export default function FormRegister(){
             event.stopPropagation();
         } else {
             try {
-                const response = await axios.post('http://localhost:5000/api/auth/signin', credentials);
+                const response = await axios.post('http://localhost:5000/api/auth/signin', credentials,{ withCredentials: true });
                 console.log('Respuesta del servidor:', response.data);
             } catch (error) {
                 console.error('Error al enviar los datos:', error
