@@ -2,7 +2,7 @@ const { body, param } = require('express-validator');
 
 const inputActivity = () => {
   return [
-    body('name_acitivity')
+    body('name_activity')
       .notEmpty()
       .withMessage('This fiel is requerid')
       .isString()

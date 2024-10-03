@@ -7,7 +7,7 @@ exports.up = function (knex) {
     if (!exits) {
       return knex.schema.createTable('activities', (table) => {
         table.increments('id').unique();
-        table.string('name_acitivity');
+        table.string('name_activity');
       });
     }
   });

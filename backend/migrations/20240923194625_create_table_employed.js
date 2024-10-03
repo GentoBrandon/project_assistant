@@ -3,7 +3,6 @@
  * @returns { Promise<void> }
  */
 
-
 //create table
 exports.up = function (knex) {
   return knex.schema.hasTable('employed').then(function (exists) {
