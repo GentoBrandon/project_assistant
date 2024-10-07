@@ -15,6 +15,7 @@ export default function FormRegister(){
             ...credentials,
             [e.target.name]: e.target.value
         });
+        
     };
 
     const [validated, setValidated] = useState(false);
@@ -29,12 +30,15 @@ export default function FormRegister(){
             try {
                 const response = await axios.post('http://localhost:5000/api/auth/signin', credentials,{ withCredentials: true });
                 console.log('Respuesta del servidor:', response.data);
+               
             } catch (error) {
                 console.error('Error al enviar los datos:', error
                 );}
         }
-
+     
         setValidated(true);
+        
+        
     };
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
