@@ -82,6 +82,33 @@ const logout = async (req, res, next) => {
     const token = req.cookies.token;
   } catch (error) {}
 };
+
+const userProfile = async (req,res,next)=>{
+  try{
+    const {id, user_name, role} = req;
+    return res.status(200).json({
+      id,
+      user_name,
+      role
+    });
+  }catch(error){
+    next(error);
+  }
+}
+const userLogout = async (req, res, next) => {
+  try {
+    res.clearCookie('token',{
+      httpOnly: true,
+      sameSite: 'strict',
+      path: '/', // Asegúrate de que coincida con la configuración inicial de la cookie
+    });
+    return res.status(200).json({
+      msg: 'Logout succesfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 const userContent = (req, res) => {
   res.status(200).send('User Content.');
 };
@@ -97,4 +124,6 @@ module.exports = {
   userAdmin,
   userContent,
   allAccess,
+  userProfile,
+  userLogout
 };

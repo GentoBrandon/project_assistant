@@ -4,7 +4,7 @@ const router = express.Router();
 const authController = require('../controllers/userAuthController');
 router.post(
   '/signup',
-  [verifySingnUp.verifyUserName, verifySingnUp.verifyUserRol],
+  [verifySingnUp.verifyUserName],
   authController.signUp
 );
 router.post('/signin', authController.signIn);
