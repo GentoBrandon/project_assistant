@@ -41,8 +41,8 @@ function TablesLots (){
             {Array.isArray(data) && data.map((item, index) => (
                 <TBodyTable key={index}>
                     <td>{index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.last_name}</td>
+                    <td>{item.name_lots}</td>
+                    <td>{item.area}</td>
                     <td>
                         <button className="btn btn-warning" onClick={() => router.push(`/editEmployed/${item.id}`)}>Editar</button>
                         <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Eliminar</button>
