@@ -23,7 +23,7 @@ function TablesLots (){
     },[]);
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:5000/api/employed/deleteEmployed/${id}`)
+        axios.delete(`http://localhost:5000/api/lots//deleteData/${id}`)
             .then(response => {
                 setData(data.filter(item => item.id !== id));
             })
