@@ -36,10 +36,10 @@ function NavPrincipal() {
             <Nav.Link href="#link">Reportes</Nav.Link>
 
             <NavDropdown title="Reportes" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/viewEmployeds">
+              <NavDropdown.Item href="/Tables/viewEmployeds">
                 Empleados
               </NavDropdown.Item>
-              <NavDropdown.Item href="#">
+              <NavDropdown.Item href="/Tables/viewLots">
                 Lotes
               </NavDropdown.Item>
               <NavDropdown.Item href="/activities">
