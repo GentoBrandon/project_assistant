@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import InputDataII from '@/components/layouts/InputData/InputDataII';
 import { useRouter } from "next/navigation";
+import styles from '../../../styles/FormStyles.module.css';
+import Buttons from '@/components/layouts/InputData/Buttons';   
 import axios from 'axios';
 
 function UpdateEmployed({edit}) { // Recibe la prop 'edit'
@@ -63,7 +65,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit}>
             <Row className="mb-3">
                 <InputDataII
                     type="text"
@@ -130,7 +132,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
                 handleChange={handleChange}
             />
 
-            <button type="submit" className="btn btn-primary">Actualizar</button>
+            <Buttons type="submit" content="Actualizar" className="btn btn-primary"/>
         </form>
     );
 }

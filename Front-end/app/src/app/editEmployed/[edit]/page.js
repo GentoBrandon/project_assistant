@@ -1,4 +1,5 @@
 'use client';
+import Title from '@/components/layouts/InputData/Title';
 import UpdateEmployed from '@/components/template/FormActualizar/updateEmployed';
 import MainLayout from '@/components/template/principal/MainLayouts';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
@@ -6,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function EmployeDetail({params}) {
   return (
     <MainLayout>
-      <h1>Editar Empleado</h1>
+      <Title title="Actualizar Empleado" />
       <UpdateEmployed edit={params.edit} />
     </MainLayout>
   );
