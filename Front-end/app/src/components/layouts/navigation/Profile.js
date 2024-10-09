@@ -6,7 +6,7 @@ function ProfileDropdown() {
       <NavDropdown
         title={
           <Image
-            src="/user_profile.png" // Reemplaza con la ruta a tu imagen
+            src="/user_profile.svg" // Reemplaza con la ruta a tu imagen
             alt="Profile Picture"
             width={40}
             height={40}
