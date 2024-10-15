@@ -1,11 +1,12 @@
 'use client';
 import MainLayout from "@/components/template/principal/MainLayouts";
 import Title from "@/components/layouts/InputData/Title";
-function UpdateActivities(){
+import UpdateAct from "@/components/template/FormActualizar/updateActivities";
+function UpdateActivities({params}){
     return(
         <MainLayout>
             <Title title="Actualizar Actividades"/>
-            <UpdateActivities edit={params.edit}/>
+            <UpdateAct edit={params.edit}/>
         </MainLayout>
 
     )

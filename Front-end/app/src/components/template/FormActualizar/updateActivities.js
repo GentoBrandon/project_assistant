@@ -1,26 +1,27 @@
 'use client';
 import InputDataII from '@/components/layouts/InputData/InputDataII';
-import styles from '../../../styles/FormStyles.module.css';
+import Styles from '../../../styles/FormStyles.module.css';
 import Buttons from '@/components/layouts/InputData/Buttons';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Form from 'react-bootstrap/Form';
 import { useRouter } from 'next/navigation';
 
 
 function UpdateActivities({edit}){
     const router = useRouter();
     const [Actividad, setActivities] = useState({
-      name_acitivity: ''
+      name_activity: ''
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/activities/getData/${edit}`)
+        axios.get(`http://localhost:5000/api/activities/searchData/${edit}`)
             .then(response => {
                 const actividad = response.data.data;
                 setActivities({
-                    name_acitivity: actividad.name_acitivity || ''
+                    name_activity: actividad.name_activity || ''
                 });
-                console.log('Datos de la actividad actualizados en el formulario:', actividad);
+               
             })
             .catch(error => {
                 console.error('Error al obtener los datos de la actividad:', error);
@@ -29,15 +30,15 @@ function UpdateActivities({edit}){
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setActivities({
-            ...Actividad,
-            [e.target.name]: e.target.value
-        });
+        setActivities(prevState => ({
+          ...prevState, 
+            [name]: value
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:5000/api/activities/updateData/${edit}`, Actividad, {
+        axios.put(`http://localhost:5000/api/activities/updateActivity/${edit}`, Actividad, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -57,9 +58,9 @@ function UpdateActivities({edit}){
             name="Actividad" 
             placeholder="Ingrese la actividad" 
             Feedback="Ingrese la actividad correctamente."
-            idInput="name_acitivity"
-            nameInput="name_acitivity"
-            value={Actividad.name_acitivity}
+            idInput="name_activity"
+            nameInput="name_activity"
+            value={Actividad.name_activity}
             handleChange={handleChange}/>
 
             <Buttons className="btn btn-primary" type="submit" content="Actualizar" /> 
