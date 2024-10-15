@@ -8,7 +8,7 @@ import axios from 'axios';
 
 function Activities(){
     const [Actividad, setActivities] = useState({
-      name_acitivity: ''
+      name_activity: ''
     });
 
     const handleChange = (e) => {
@@ -20,14 +20,14 @@ function Activities(){
 
     const [validated, setValidated] = useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
       if (form.checkValidity() === false) {
         event.stopPropagation();
       }else{
         try {
-          const response = axios.post('http://localhost:5000/api/activities/insertData', Actividad);
+          const response = await axios.post('http://localhost:5000/api/activities/insertData', Actividad);
           console.log('Respuesta del servidor:', response.data);
         } catch (error) {
           console.error('Error al enviar los datos:', error);          
@@ -43,8 +43,8 @@ function Activities(){
             name="Actividad" 
             placeholder="Ingrese la actividad" 
             Feedback="Ingrese la actividad correctamente."
-            idInput="name_acitivity"
-            nameInput="name_acitivity"
+            idInput="name_activity"
+            nameInput="name_activity"
             handleChange={handleChange}/>
 
             <Buttons className="btn btn-primary" type="submit" content="Enviar" /> 

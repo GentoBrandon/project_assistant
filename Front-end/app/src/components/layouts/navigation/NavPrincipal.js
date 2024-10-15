@@ -42,8 +42,8 @@ function NavPrincipal() {
               <NavDropdown.Item href="/Tables/viewLots">
                 Lotes
               </NavDropdown.Item>
-              <NavDropdown.Item href="/activities">
-                Empleados
+              <NavDropdown.Item href="/Tables/viewActivities">
+                Actividades
               </NavDropdown.Item>
             </NavDropdown>
 
