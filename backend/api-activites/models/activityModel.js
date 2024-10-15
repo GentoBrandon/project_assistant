@@ -109,7 +109,7 @@ const updateActivity = async (id, body) => {
       };
     }
     const activityUpdated = await knex('activities').where({ id }).update({
-      name_acitivity: body.name_acitivity,
+      name_activity: body.name_activity,
     });
 
     if (activityUpdated === 0) {
