@@ -37,6 +37,7 @@ function TablesLots (){
                 <th>No.</th>
                 <th>Nombre</th>
                 <th>Medida</th>
+                <th>Acciones</th>
             </TheadTable>
             {Array.isArray(data) && data.map((item, index) => (
                 <TBodyTable key={index}>
@@ -44,7 +45,7 @@ function TablesLots (){
                     <td>{item.name_lots}</td>
                     <td>{item.area}</td>
                     <td>
-                        <button className="btn btn-warning" onClick={() => router.push(`/editEmployed/${item.id}`)}>Editar</button>
+                        <button className="btn btn-warning" onClick={() => router.push(`/edits/editLot/${item.id}`)}>Editar</button>
                         <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Eliminar</button>
                     </td>
                 </TBodyTable>
