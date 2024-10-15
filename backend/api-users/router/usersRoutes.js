@@ -3,6 +3,7 @@ const authController = require('../controllers/userAuthController');
 const express = require('express');
 const router = express.Router();
 
-router.get('/all', authController.allAccess);
-router.get('/test', [authJwt.verifyToken], authController.userContent);
+
+router.get('/profile', [authJwt.verifyTokens], authController.userProfile);
+router.post('/logout', [authJwt.verifyTokens],authController.userLogout);
 module.exports = router;

@@ -5,7 +5,9 @@ const routerActivities = require('../api-activites/router/activityRoutes');
 const { errorHandling } = require('../middleware/errorHandling');
 const authRouter = require('../api-users/router/authRoutes');
 const usersRouter = require('../api-users/router/usersRoutes');
+const subActivityRouter = require('../api-sub_activities/routes/subActivityRoute');
 const cors = require('cors');
+const cookies = require('cookie-parser');
 class App {
   #app;
   #_PORT;
@@ -21,6 +23,7 @@ class App {
         credentials: true, // Permitir el envío de cookies
       })
     );
+    this.#app.use(cookies());
     this.#app.use(express.urlencoded({ extended: true }));
   }
   #middleware() {
@@ -32,6 +35,7 @@ class App {
     this.#app.use('/api/activities', routerActivities);
     this.#app.use('/api/auth', authRouter);
     this.#app.use('/api/users', usersRouter);
+    this.#app.use('/api/sub-activities', subActivityRouter);
   }
   async init() {
     this.#settings();
