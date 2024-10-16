@@ -3,8 +3,11 @@ import styles from '../../../styles/Login.module.css'
 import { Form}  from "react-bootstrap";
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation'; 
 
 export default function FormRegister(){
+    const router = useRouter();
+
     const [credentials, setCredentials] = useState({
       user_name: '',
       password: ''
@@ -30,6 +33,7 @@ export default function FormRegister(){
             try {
                 const response = await axios.post('http://localhost:5000/api/auth/signin', credentials,{ withCredentials: true });
                 console.log('Respuesta del servidor:', response.data);
+                router.push('/dashboard'); // Redirigir a la página principal
                
             } catch (error) {
                 console.error('Error al enviar los datos:', error
@@ -71,7 +75,7 @@ export default function FormRegister(){
                 <a href="#" className={styles.forgotPassword}>
                     ¿Olvidó su contraseña?
                 </a>
-                <button type="submit" className={styles.loginButton}>
+                <button type="submit" className={styles.loginButton} >
                     Iniciar Sesión
                 </button>
         </Form>
