@@ -8,4 +8,5 @@ router.get('/search-sub-activity/:id',validatorSubActivity.inputId(),subActivity
 router.delete('/delete-sub-activity/:id',validatorSubActivity.inputId(),subActivityController.deleteSubActivity);
 router.put('/update-sub-activity/:id',validatorSubActivity.inputDataUpdate(),subActivityController.updateSubActivity);
 router.get('/search-name-sub-activity/:name_sub_activity',validatorSubActivity.inputNameSubActivity(),subActivityController.searcNameSubActivity);
+router.get('/search-activity/:id',validatorSubActivity.inputId(),subActivityController.searchActivity);
 module.exports = router;

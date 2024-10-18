@@ -1,11 +1,12 @@
 const express = require('express');
-const routerEmployed = require('../api-employed/routes/employedRoutes');
-const routerLots = require('../api-lots/routes/lotsRoutes');
-const routerActivities = require('../api-activites/router/activityRoutes');
+const routerEmployed = require('../api/api-employed/routes/employedRoutes');
+const routerLots = require('../api/api-lots/routes/lotsRoutes');
+const routerActivities = require('../api/api-activites/router/activityRoutes');
 const { errorHandling } = require('../middleware/errorHandling');
-const authRouter = require('../api-users/router/authRoutes');
-const usersRouter = require('../api-users/router/usersRoutes');
-const subActivityRouter = require('../api-sub_activities/routes/subActivityRoute');
+const authRouter = require('../api/api-users/router/authRoutes');
+const usersRouter = require('../api/api-users/router/usersRoutes');
+const subActivityRouter = require('../api/api-sub_activities/routes/subActivityRoute');
+const employeActivityRouter = require('../api/api-employees-activities/routes/employeActivityRouter');
 const cors = require('cors');
 const cookies = require('cookie-parser');
 class App {
@@ -36,6 +37,7 @@ class App {
     this.#app.use('/api/auth', authRouter);
     this.#app.use('/api/users', usersRouter);
     this.#app.use('/api/sub-activities', subActivityRouter);
+    this.#app.use('/api/employees-activities', employeActivityRouter);
   }
   async init() {
     this.#settings();
