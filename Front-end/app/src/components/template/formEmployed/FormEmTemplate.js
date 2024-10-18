@@ -35,6 +35,7 @@ function FormEmployed() {
             event.stopPropagation();
         }else{
             try {
+                console.log('Datos a enviar:', Employed);
                 const response = axios.post('http://localhost:5000/api/employed/crear', Employed);
                 console.log('Respuesta del servidor:', response.data);
             } catch (error) {
