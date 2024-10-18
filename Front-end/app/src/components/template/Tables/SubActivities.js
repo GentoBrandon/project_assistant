@@ -2,43 +2,80 @@
 import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
-import TBodyTable from "@/components/layouts/InputData/TBodyTable";
+import TBodyTII from "@/components/layouts/InputData/TBodyTII";
 import Table from "react-bootstrap/Table";
-import ThTable from "@/components/layouts/InputData/ThTable";
-import Buttons from "@/components/layouts/InputData/Buttons";
 import TheadTable from "@/components/layouts/InputData/TheadTable";
-function SubActivities(){
-    const [Activities, setActivities] = useState([]);
 
+function SubActivities() {
+    const [Activities, setActivities] = useState([]); // Para almacenar las actividades
+    const [subActivities, setSubActivities] = useState([]); // Para almacenar las subactividades obtenidas
+    const [selectedActivity, setSelectedActivity] = useState(null); // Para manejar la actividad seleccionada
+
+    // Obtener las actividades al cargar el componente
     useEffect(() => {
         axios.get('http://localhost:5000/api/activities/getdata')
             .then(response => {
-                setActivities(response.data.data);
+                setActivities(response.data.data); // Asume que el array de actividades viene en data.data
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
             });
     }, []);
 
-    return(
+    // Manejar el cambio de selección de actividad
+    const handleActivityChange = (e) => {
+        const activityId = e.target.value;
+        setSelectedActivity(activityId);
+
+        // Obtener las subactividades relacionadas con la actividad seleccionada
+        if (activityId) {
+            console.log(activityId);
+            axios.get(`http://localhost:5000/api/sub-activities/search-activity/${activityId}`)
+                .then(response => {
+                    console.log(response.data);
+                    setSubActivities(response.data); // Ajusta según el formato de respuesta de tu API
+                })
+                .catch(error => {
+                    console.error('Error al obtener las sub-actividades:', error);
+                });
+        }
+    };
+
+    return (
         <>
-        
-        <Form.Select aria-label="Default select example">
-                <option>Open this select menu</option>
+            {/* Selector de Actividad */}
+            <Form.Select aria-label="Seleccionar Actividad" onChange={handleActivityChange}>
+                <option>Seleccione una actividad</option>
                 {Array.isArray(Activities) && Activities.map((item, index) => (
                     <option key={index} value={item.id}>{item.name_activity}</option>
                 ))}
-        </Form.Select>
-        <Table responsive>
-            <TheadTable>
-                <th>No.</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-            </TheadTable>
-            <TBodyTable>
-            </TBodyTable>
-        </Table>
+            </Form.Select>
+
+            {/* Tabla de Subactividades */}
+            <Table responsive>
+                <TheadTable>
+                    <th>No.</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </TheadTable>
+                <TBodyTII>
+                    {Array.isArray(subActivities) && subActivities.length > 0 ? (
+                        subActivities.map((subActivity, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{subActivity.name_sub_activity}</td>
+                                <td>{subActivity.description}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3" style={{ textAlign: "center" }}>No hay subactividades disponibles</td>
+                        </tr>
+                    )}
+                </TBodyTII>
+            </Table>
         </>
-    )
+    );
 }
+
 export default SubActivities;
