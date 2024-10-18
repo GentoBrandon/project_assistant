@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const byCript = require('bcryptjs');
-const configKey = require('../../config/auth.config');
+const configKey = require('../../../config/auth.config');
 const { validationResult } = require('express-validator');
 const userModel = require('../model/userModel');
 const { serialize } = require('cookie');

@@ -1,5 +1,5 @@
 const byCript = require('bcryptjs');
-const db = require('../../config/db');
+const db = require('../../../config/db');
 const { validationResult } = require('express-validator');
 const verifyUserName = async (req, res, next) => {
   const errors = validationResult(req);

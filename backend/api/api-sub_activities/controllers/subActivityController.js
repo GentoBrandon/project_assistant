@@ -123,11 +123,27 @@ const searcNameSubActivity = async (req,res,next)=>{
         next(error)
     }
 }
+
+const searchActivity = async (req,res,next)=>{
+    try{
+        const {id} = req.params;
+        const resultData = await subActivityModel.searchActivity(id)
+        if(!resultData.success){
+            const error = new Error(resultData.msg);
+            error.status = 404;
+            throw error
+        }
+        return res.status(200).json(resultData.data)
+    }catch(error){
+        next(error)
+    }
+}
 module.exports= {
     insertSubActivity,
     getSubActivities,
     searchSubActivity,
     deleteSubActivity,
     updateSubActivity,
-    searcNameSubActivity
+    searcNameSubActivity,
+    searchActivity
 }

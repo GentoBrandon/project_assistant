@@ -1,4 +1,4 @@
-const db = require('../../config/db')
+const db = require('../../../config/db');
 
 
 const insertSubActivity = async (body) => {
@@ -128,11 +128,35 @@ const searcNameSubActivity = async (name_sub_activity) => {
     }
 }
 }
+
+const searchActivity = async (id_actividad) =>{
+    try {
+        const resultData = await db('sub_activities').select('*').where({id_actividad:id_actividad});
+        console.log(resultData)
+        if(!resultData){
+            return{
+                success: false,
+                msg: 'Data not found'
+            }
+        }
+        return{
+            success: true,
+            data: resultData
+        }
+    } catch (error) {   
+        throw{
+            msg: 'Error while get sub_activity',
+            stack: error.stack
+        }
+        
+    }
+}
 module.exports = {
     insertSubActivity,
     getSubActivities,
     searchSubActivity,
     deleteSubActivity,
     updateSubActivity,
-    searcNameSubActivity
+    searcNameSubActivity,
+    searchActivity
 }
