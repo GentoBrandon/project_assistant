@@ -57,6 +57,9 @@ function NavPrincipal() {
               <NavDropdown.Item href="/registers/activities">
                 Actividad
               </NavDropdown.Item>
+              <NavDropdown.Item href="/registers/subActivities">
+                Sub-Actividad
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
