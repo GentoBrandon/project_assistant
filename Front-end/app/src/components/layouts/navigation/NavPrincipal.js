@@ -28,7 +28,7 @@ function NavPrincipal() {
           <Image src="/logo-anacafe.webp" thumbnail loading="lazy" />
       </Col>
       <Container>
-        <Navbar.Brand href="#home">Inicio</Navbar.Brand>
+        <Navbar.Brand href="/dashboard">Inicio</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -44,6 +44,9 @@ function NavPrincipal() {
               </NavDropdown.Item>
               <NavDropdown.Item href="/Tables/viewActivities">
                 Actividades
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/Tables/viewSubActivities">
+                Sub-actividades
               </NavDropdown.Item>
             </NavDropdown>
 
