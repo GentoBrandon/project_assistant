@@ -42,7 +42,7 @@ function TableActivities(){
                     <td>{index + 1}</td>
                     <td>{item.name_activity}</td>
                     <td>
-                        <button className="btn btn-warning" onClick={() => router.push(`/edits/editActivities/${item.id}`)}>Editar</button>
+                        <button className="btn btn-warning me-2" onClick={() => router.push(`/edits/editActivities/${item.id}`)}>Editar</button>
                         <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Eliminar</button>
                     </td>
                 </TBodyTable>
