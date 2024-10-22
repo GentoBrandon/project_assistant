@@ -45,7 +45,7 @@ function TablesLots (){
                     <td>{item.name_lots}</td>
                     <td>{item.area}</td>
                     <td>
-                        <button className="btn btn-warning" onClick={() => router.push(`/edits/editLot/${item.id}`)}>Editar</button>
+                        <button className="btn btn-warning me-2" onClick={() => router.push(`/edits/editLot/${item.id}`)}>Editar</button>
                         <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Eliminar</button>
                     </td>
                 </TBodyTable>
