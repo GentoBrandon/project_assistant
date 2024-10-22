@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from 'react-bootstrap/Form';    
 import { useState } from 'react';
 import axios from 'axios';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 
 function Activities(){
     const [Actividad, setActivities] = useState({
@@ -28,9 +30,21 @@ function Activities(){
       }else{
         try {
           const response = await axios.post('http://localhost:5000/api/activities/insertData', Actividad);
-          console.log('Respuesta del servidor:', response.data);
+          toast.success("¡Actividad registrada correctamente!", {
+            duration: 1500,
+            progress: true,
+            position: "top-center",
+            transition: "bounceIn",
+            sonido: true,
+          });
         } catch (error) {
-          console.error('Error al enviar los datos:', error);          
+          toast.error("¡Error al registrar la actividad!", {
+            duration: 2000,
+            progress: true,
+            position: "top-center",
+            transition: "bounceIn",
+            sonido: true,
+          });         
         }
       }
   
@@ -40,8 +54,8 @@ function Activities(){
         <Form className={Styles.form} noValidate validated={validated} onSubmit={handleSubmit}>
             <InputDataII 
             type="text" 
-            name="Actividad" 
-            placeholder="Ingrese la actividad" 
+            name="Ingrese su actividad" 
+            placeholder="Actividad" 
             Feedback="Ingrese la actividad correctamente."
             idInput="name_activity"
             nameInput="name_activity"
