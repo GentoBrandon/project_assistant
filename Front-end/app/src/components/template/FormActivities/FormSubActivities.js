@@ -4,6 +4,8 @@ import axios from "axios";
 import Buttons from "@/components/layouts/InputData/Buttons";
 import Styles from "../../../styles/selectStyles.module.css";
 import StylesForm from "../../../styles/FormStyles.module.css";
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 function FormSubActivities() {
     const [Activities, setActivities] = useState([]);
     const [dynamicFields, setDynamicFields] = useState([{ name_sub_activity: '', description: '' }]);
@@ -50,13 +52,25 @@ function FormSubActivities() {
 
         // Validar que se haya seleccionado una actividad
         if (!selectedActivity) {
-            alert("Debes seleccionar una actividad.");
+            toast.info("¡Tienes que seleccionar una actividad!", {
+                duration: 2000,
+                progress: true,
+                position: "top-center",
+                transition: "bounceIn",
+                sonido: true,
+              });
             return;
         }
 
         // Validar que todos los campos de subactividad estén completos
         if (dynamicFields.some(field => !field.name_sub_activity || !field.description)) {
-            alert("Todos los campos de subactividad son obligatorios.");
+            toast.warning("¡Todos los campos son obligatorios!", {
+                duration: 2000,
+                progress: true,
+                position: "top-center",
+                transition: "bounceIn",
+                sonido: true,
+              });
             return;
         }
 
@@ -68,14 +82,24 @@ function FormSubActivities() {
                 id_actividad: selectedActivity,
             };
 
-            console.log('Enviando sub-actividad:', dataToSubmit);
-
             try {
                 // Enviar los datos con axios
                 await axios.post('http://localhost:5000/api/sub-activities/insert-sub-activity', dataToSubmit);
-                console.log('Datos enviados exitosamente');
+                toast.success("¡Subactividades registradas correctamente!", {
+                    duration: 1500,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             } catch (error) {
-                console.error('Error al enviar los datos:', error);
+                toast.error("¡Error al ingresar subactividades!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             }
         }
     };
@@ -84,7 +108,7 @@ function FormSubActivities() {
         <form onSubmit={handleSubmit} className={StylesForm.form}>
             <h4>Seleccionar Actividad</h4>
             <Form.Select className={Styles.select} aria-label="Default select example" onChange={handleActivityChange}>
-                <option>Open this select menu</option>
+                <option>Seleccione una actividad</option>
                 {Array.isArray(Activities) && Activities.map((item, index) => (
                     <option key={index} value={item.id}>{item.name_activity}</option>
                 ))}
