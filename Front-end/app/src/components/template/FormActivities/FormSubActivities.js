@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import Buttons from "@/components/layouts/InputData/Buttons";
-
+import Styles from "../../../styles/selectStyles.module.css";
+import StylesForm from "../../../styles/FormStyles.module.css";
 function FormSubActivities() {
     const [Activities, setActivities] = useState([]);
     const [dynamicFields, setDynamicFields] = useState([{ name_sub_activity: '', description: '' }]);
@@ -80,17 +81,17 @@ function FormSubActivities() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Seleccionar Actividad</h1>
-            <Form.Select aria-label="Default select example" onChange={handleActivityChange}>
+        <form onSubmit={handleSubmit} className={StylesForm.form}>
+            <h4>Seleccionar Actividad</h4>
+            <Form.Select className={Styles.select} aria-label="Default select example" onChange={handleActivityChange}>
                 <option>Open this select menu</option>
                 {Array.isArray(Activities) && Activities.map((item, index) => (
                     <option key={index} value={item.id}>{item.name_activity}</option>
                 ))}
             </Form.Select>
             <br />
-            <div>
-                <h1>Ingrese sub-actividades</h1>
+            <div >
+                <h4>Ingrese sub-actividades</h4>
                 <div className="container">
                     <button type="button" onClick={handleAddField} className="btn btn-primary">
                         Agregar Sub-actividad
