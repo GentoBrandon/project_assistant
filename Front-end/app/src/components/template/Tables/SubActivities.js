@@ -5,6 +5,10 @@ import axios from "axios";
 import TBodyTII from "@/components/layouts/InputData/TBodyTII";
 import Table from "react-bootstrap/Table";
 import TheadTable from "@/components/layouts/InputData/TheadTable";
+import { Button } from "react-bootstrap";
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+import Styles from "../../../styles/selectStyles.module.css";
 
 function SubActivities() {
     const [Activities, setActivities] = useState([]); // Para almacenar las actividades
@@ -42,14 +46,31 @@ function SubActivities() {
     };
 
     return (
-        <>
-            {/* Selector de Actividad */}
-            <Form.Select aria-label="Seleccionar Actividad" onChange={handleActivityChange}>
-                <option>Seleccione una actividad</option>
-                {Array.isArray(Activities) && Activities.map((item, index) => (
-                    <option key={index} value={item.id}>{item.name_activity}</option>
-                ))}
-            </Form.Select>
+        <>  
+            <div className={Styles.container}>            
+                <Form.Select className={Styles.select} aria-label="Seleccionar Actividad" onChange={handleActivityChange}>
+                    <option>Seleccione una actividad</option>
+                    {Array.isArray(Activities) && Activities.map((item, index) => (
+                        <option key={index} value={item.id}>{item.name_activity}</option>
+                    ))}
+                </Form.Select>
+                <div className={Styles.select}>
+                    <Button className={Styles.btn} variant="primary" onClick={() => {
+                        if (selectedActivity) {
+                            window.location.href = `/edits/editSubActivities/${selectedActivity}`;
+                        } else {
+                            toast.error("¡Error, primero seleccione una actividad!", {
+                                duration: 2000,
+                                progress: true,
+                                position: "top-center",
+                                transition: "bounceIn",
+                                sonido: true,
+                            });
+                        }
+                    }}>Editar Subactividades</Button>
+                </div>
+            </div>
+
 
             {/* Tabla de Subactividades */}
             <Table responsive>
