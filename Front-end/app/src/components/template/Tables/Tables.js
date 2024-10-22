@@ -54,7 +54,7 @@ function Tables() {
                     <td>{item.number_NIT}</td>
                     <td>{item.direction}</td>
                     <td>
-                        <button className="btn btn-warning" onClick={() => router.push(`/edits/editEmployed/${item.id}`)}>Editar</button>
+                        <button className="btn btn-warning me-2" onClick={() => router.push(`/edits/editEmployed/${item.id}`)}>Editar</button>
                         <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Eliminar</button>
                     </td>
                 </TBodyTable>
