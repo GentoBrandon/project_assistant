@@ -9,8 +9,10 @@ import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { toast } from "nextjs-toast-notify";
 import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+import { useRouter } from 'next/navigation';
 
 function FormEmployed() {  
+    const router = useRouter();
     const [Employed, setEmployed] = useState({
         name: '',
         last_name: '',
@@ -45,9 +47,10 @@ function FormEmployed() {
                     transition: "bounceIn",
                     sonido: true,
                   });
+                  router.push('/register/registerEmployed');
             } catch (error) {
                 toast.error("¡Error, intente de nuevo!", {
-                    duration: 4000,
+                    duration: 2000,
                     progress: true,
                     position: "top-center",
                     transition: "bounceIn",
@@ -94,7 +97,7 @@ function FormEmployed() {
             <InputDataII  
             type="text" 
             placeholder="IGSS" 
-            name="Ingrese su IGSs"
+            name="Ingrese su IGSS"
             Feedback="Ingrese su IGSS"
             idInput="number_IGGS"
             nameInput="number_IGGS"
@@ -103,7 +106,7 @@ function FormEmployed() {
 
             <InputDataII
             type="text" 
-            placeholder="Numero de telefono." 
+            placeholder="Numero de telefono" 
             name="Ingrese su numero de Telefono" 
             Feedback="Ingrese su numero de Telefono"
             idInput="phone_number"
