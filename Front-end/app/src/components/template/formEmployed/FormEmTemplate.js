@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { Form, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 
 function FormEmployed() {  
     const [Employed, setEmployed] = useState({
@@ -35,11 +37,22 @@ function FormEmployed() {
             event.stopPropagation();
         }else{
             try {
-                console.log('Datos a enviar:', Employed);
                 const response = axios.post('http://localhost:5000/api/employed/crear', Employed);
-                console.log('Respuesta del servidor:', response.data);
+                toast.success("¡Empleado registrado!", {
+                    duration: 1500,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             } catch (error) {
-                console.error('Error al enviar los datos:', error);
+                toast.error("¡Error, intente de nuevo!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             }
         }
         setValidated(true);
