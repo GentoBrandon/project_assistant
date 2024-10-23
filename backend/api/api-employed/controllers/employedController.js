@@ -1,5 +1,26 @@
+const {spawn}=require('child_process')
 const employedModel = require('../models/employedModel');
+const runPythonProcess = (script, args = []) => {
+  return new Promise((resolve, reject) => {
+      const process = spawn('python', [script, ...args]);
 
+      process.stdout.on('data', (data) => {
+          console.log(`stdout: ${data}`);
+      });
+
+      process.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+      });
+
+      process.on('close', (code) => {
+          if (code === 0) {
+              resolve();
+          } else {
+              reject(new Error(`Process exited with code ${code}`));
+          }
+      });
+  });
+};
 const insertData = async (body) => {
   try {
     console.log('Ingresando');
@@ -10,6 +31,8 @@ const insertData = async (body) => {
       error.status = 400;
       throw error;
     }
+    await runPythonProcess('../../../../recognition-face/FaceRecognition2/capture.py',[result.id])
+    await runPythonProcess('../../../../recognition-face/FaceRecognition2/train_model.py',[]);
     console.log('Empleado Ingresado Ingresado');
     return { status: 200, msg: 'Empleado Registrado con exito' };
   } catch (error) {

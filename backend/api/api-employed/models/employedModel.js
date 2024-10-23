@@ -10,7 +10,7 @@ const insertData = async (body) => {
       number_IGGS: body.number_IGGS,
       phone_number: body.phone_number,
       number_NIT: body.number_NIT,
-    }).returnig('id');
+    }).returning('id');
     return { success: true,id:id};
   } catch (err) {
     console.error(err);
