@@ -2,7 +2,7 @@ const knex = require('../../../config/db');
 
 const insertData = async (body) => {
   try {
-    await knex('employed').insert({
+    const [id] = await knex('employed').insert({
       name: body.name,
       last_name: body.last_name,
       direction: body.direction,
@@ -10,8 +10,8 @@ const insertData = async (body) => {
       number_IGGS: body.number_IGGS,
       phone_number: body.phone_number,
       number_NIT: body.number_NIT,
-    });
-    return { success: true };
+    }).returnig('id');
+    return { success: true,id:id};
   } catch (err) {
     console.error(err);
     return { success: false };
