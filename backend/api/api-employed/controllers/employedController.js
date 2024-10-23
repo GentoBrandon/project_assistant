@@ -1,4 +1,5 @@
 const {spawn}=require('child_process')
+const path = require('path');
 const employedModel = require('../models/employedModel');
 const runPythonProcess = (script, args = []) => {
   return new Promise((resolve, reject) => {
@@ -31,8 +32,13 @@ const insertData = async (body) => {
       error.status = 400;
       throw error;
     }
-    await runPythonProcess('../../../../recognition-face/FaceRecognition2/capture.py',[result.id])
-    await runPythonProcess('../../../../recognition-face/FaceRecognition2/train_model.py',[]);
+    console.log(result.id)
+     // Usa rutas absolutas para los scripts de Python
+     const captureScriptPath = path.resolve(__dirname, '../../../../recogniction-face/FaceRecognition2/capture.py');
+     const trainModelScriptPath = path.resolve(__dirname, '../../../../recogniction-face/FaceRecognition2/train_model.py');
+ 
+     await runPythonProcess(captureScriptPath, [result.id.id]);
+     await runPythonProcess(trainModelScriptPath, []);
     console.log('Empleado Ingresado Ingresado');
     return { status: 200, msg: 'Empleado Registrado con exito' };
   } catch (error) {
