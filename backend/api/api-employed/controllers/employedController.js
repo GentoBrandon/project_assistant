@@ -4,6 +4,7 @@ const insertData = async (body) => {
   try {
     console.log('Ingresando');
     const result = await employedModel.insertData(body);
+  
     if (!result.success) {
       const error = new Error('Error al insertar');
       error.status = 400;
