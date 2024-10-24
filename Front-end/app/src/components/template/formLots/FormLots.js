@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form } from "react-bootstrap";
 import { useState } from 'react';
 import axios from 'axios';
+import { toast } from "nextjs-toast-notify";
 
 function Lots(){
     const [Lotes, setLots] = useState({
@@ -29,10 +30,22 @@ function Lots(){
       } else {
           try {
               const response = await axios.post('http://localhost:5000/api/lots/insertData', Lotes);
-              console.log('Respuesta del servidor:', response.data);
+              toast.success("¡Lote registrado, correctamente!", {
+                duration: 1500,
+                progress: true,
+                position: "top-center",
+                transition: "bounceIn",
+                sonido: true,
+              });
           } catch (error) {
-              console.error('Error al enviar los datos:', error
-              );}
+            toast.error("¡Error al registrar el lote!", {
+                duration: 1500,
+                progress: true,
+                position: "top-center",
+                transition: "bounceIn",
+                sonido: true,
+                });
+          }
       }
 
       setValidated(true);
@@ -42,7 +55,7 @@ function Lots(){
             <InputDataII  
             type="text" 
             placeholder="Nombre" 
-            name="Ingrese el nombre del lote" 
+            name="Ingrese el nombre del Lote" 
             Feedback="Ingrese correctamente el nombre"
             idInput="name_lots"
             nameInput="name_lots"
@@ -50,7 +63,7 @@ function Lots(){
 
             <InputDataII
             type="number" 
-            placeholder="Medida de en Mts cuadrados" 
+            placeholder="Medida en Mts cuadrados" 
             name="Ingrese la medida"
             Feedback="Ingrese correctamente la medida."
             idInput="area"

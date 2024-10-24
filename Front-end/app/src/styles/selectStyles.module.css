@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.select {
+    width: 40%;
+    height: 40px;
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+.btn {
+    width: 50%;
+    height: 40px;
+    border-radius: 5px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+.btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}

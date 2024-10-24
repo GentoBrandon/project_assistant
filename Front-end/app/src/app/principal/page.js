@@ -1,5 +1,5 @@
 // src/pages/index.js
-import MainLayout from '../../components/template/principal/MainLayouts';
+import MainLayout from '@/components/template/principal/MainLayouts';
 
 export default function HomePage() {
   return (

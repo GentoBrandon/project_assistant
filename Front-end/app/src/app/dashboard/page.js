@@ -1,12 +1,14 @@
 'use client'; // Asegúrate de que esta directiva esté al inicio del archivo
 
 import axios from "axios";
-import { useRouter } from 'next/router'; // Asegúrate de usar useRouter para el cliente
+import { useRouter } from 'next/navigation'; // Asegúrate de usar useRouter para el cliente
 import { useState } from "react";
+import MainLayout from "@/components/template/principal/MainLayouts";
 
 function DashboardPage() {
+  const router = useRouter();
   const [profileData, setProfileData] = useState(null);
-
+/*
 
   const getProfile = async () => {
     try {
@@ -16,15 +18,17 @@ function DashboardPage() {
       setProfileData(response.data);
     } catch (error) {
       console.error("Error al obtener el perfil", error);
+      router.push("/");
     }
   };
-
+*/
   const handleLogout = async () => {
     try {
       await axios.post("http://localhost:5000/api/users/logout", {}, {
         withCredentials: true,
       });
       setProfileData(null);
+      router.push("/");
 
     } catch (error) {
       console.error("Error al hacer logout", error);
@@ -33,17 +37,11 @@ function DashboardPage() {
 
   return (
     <div>
+      <MainLayout>
       <h1>Dashboard</h1>
-      <button onClick={getProfile}>Get Profile</button>
-      {profileData && (
-        <div>
-          <h2>Perfil:</h2>
-          <p>Nombre de usuario: {profileData.user_name}</p>
-          <p>Rol: {profileData.role}</p>
-        </div>
-      )}
+      
       <button onClick={handleLogout}>Logout</button>
-
+      </MainLayout>
     
     </div>
   );
