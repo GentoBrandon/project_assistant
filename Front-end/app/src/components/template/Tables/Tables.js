@@ -5,6 +5,8 @@ import Table from 'react-bootstrap/Table';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 
 function Tables() {
     const [data, setData] = useState([]);
@@ -24,9 +26,22 @@ function Tables() {
         axios.delete(`http://localhost:5000/api/employed/deleteEmployed/${id}`)
             .then(response => {
                 setData(data.filter(item => item.id !== id));
+                toast.success("¡Empleado eliminado!", {
+                    duration: 1500,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             })
             .catch(error => {
-                console.error('Error al eliminar el registro:', error);
+                toast.error("¡Error al eliminar!", {
+                    duration: 1500,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             });
     };
     

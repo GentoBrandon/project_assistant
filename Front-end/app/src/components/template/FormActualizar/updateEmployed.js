@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import styles from '../../../styles/FormStyles.module.css';
 import Buttons from '@/components/layouts/InputData/Buttons';   
 import axios from 'axios';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 
 function UpdateEmployed({edit}) { // Recibe la prop 'edit'
     const router = useRouter();
@@ -22,7 +24,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
     useEffect(() => {
         axios.get(`http://localhost:5000/api/employed/searchEmployed/${edit}`)
             .then(response => {
-                const empleado = response.data.data; // Asegúrate de acceder a 'data' dentro de 'response.data'
+                const empleado = response.data.data; 
                 setFormData({
                     name: empleado.name || '',
                     last_name: empleado.last_name || '',
@@ -32,10 +34,16 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
                     number_NIT: empleado.number_NIT || '',
                     direction: empleado.direction || ''
                 });
-                console.log('Datos del empleado actualizados en el formulario:', empleado);
             })
             .catch(error => {
-                console.error('Error al obtener los datos del empleado:', error);
+                toast.info("¡No se pudieron extraer los datos del empleado!", {
+                    duration: 2000,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
+                  router.push('/Tables/viewEmployeds');
             });
     }, [edit]);
 
@@ -56,11 +64,23 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
             }
         })
             .then(() => {
-                console.log('Empleado actualizado con éxito');
-                router.push('/viewEmployeds'); // Redirigir a la página principal
+                toast.success("¡Datos actualizados!", {
+                    duration: 1500,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
+                router.push('/Tables/viewEmployeds'); // Redirigir a la página principal
             })
             .catch(error => {
-                console.error('Error al actualizar los datos:', error);
+                toast.error("¡Error al actualizar!", {
+                    duration: 1500,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             });
     };
 
@@ -69,6 +89,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
             <Row className="mb-3">
                 <InputDataII
                     type="text"
+                    name="Nombre"
                     placeholder="Nombre"
                     idInput="name"
                     nameInput="name"
@@ -78,6 +99,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
                 />
                 <InputDataII
                     type="text"
+                    name="Apellido"
                     placeholder="Apellido"
                     idInput="last_name"
                     nameInput="last_name"
@@ -89,6 +111,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
 
             <InputDataII
                 type="text"
+                name="DPI"
                 placeholder="DPI"
                 idInput="dpi"
                 nameInput="dpi"
@@ -98,6 +121,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
 
             <InputDataII
                 type="text"
+                name="Número de IGSS"
                 placeholder="IGSS"
                 idInput="number_IGGS"
                 nameInput="number_IGGS"
@@ -107,6 +131,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
 
             <InputDataII
                 type="text"
+                name="Número de teléfono"
                 placeholder="Número de teléfono"
                 idInput="phone_number"
                 nameInput="phone_number"
@@ -116,6 +141,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
 
             <InputDataII
                 type="text"
+                name="Número de NIT"
                 placeholder="NIT"
                 idInput="number_NIT"
                 nameInput="number_NIT"
@@ -125,6 +151,7 @@ function UpdateEmployed({edit}) { // Recibe la prop 'edit'
 
             <InputDataII
                 type="text"
+                name="Dirección"
                 placeholder="Dirección"
                 idInput="direction"
                 nameInput="direction"

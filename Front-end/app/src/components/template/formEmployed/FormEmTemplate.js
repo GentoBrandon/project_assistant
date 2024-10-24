@@ -47,7 +47,7 @@ function FormEmployed() {
                     transition: "bounceIn",
                     sonido: true,
                   });
-                  router.push('/register/registerEmployed');
+                  router.push('/registers/registerEmployed');
             } catch (error) {
                 toast.error("¡Error, intente de nuevo!", {
                     duration: 2000,
