@@ -83,3 +83,10 @@
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Añadir un efecto de brillo en el foco */
   outline: none; /* Quitar el borde por defecto de los navegadores */
 }
+
+.error {
+    color: red; /* Cambia el color del texto de error a rojo */
+    font-size: 0.875rem; /* Tamaño de la letra */
+    margin-top: 5px; /* Espaciado superior */
+    font-weight: 600; /* Opcional: dar énfasis a los mensajes de error */
+}
