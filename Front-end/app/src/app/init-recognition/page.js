@@ -6,7 +6,7 @@ export default function Home() {
 
   const startRecognition = async () => {
     try {
-      const response = await fetch('http://localhost:5000/iniciar-reconocimiento', {
+      const response = await fetch('http://localhost:7000/iniciar-reconocimiento', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export default function Home() {
 
   const stopRecognition = async () => {
     try {
-      const response = await fetch('http://localhost:5000/detener-reconocimiento', {
+      const response = await fetch('http://localhost:7000/detener-reconocimiento', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

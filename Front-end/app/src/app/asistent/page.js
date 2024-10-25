@@ -19,7 +19,7 @@ export default function Home() {
   // Función para enviar el texto transcrito al backend para corrección
   const correctTextWithOpenAI = async (transcript) => {
     try {
-      const response = await fetch('http://localhost:5000/corregir-texto', {
+      const response = await fetch('http://localhost:7000/corregir-texto', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ export default function Home() {
   // Función para corregir el lote con OpenAI
   const correctLoteWithOpenAI = async (transcript) => {
     try {
-      const response = await fetch('http://localhost:5000/api/corregir-lote', {
+      const response = await fetch('http://localhost:7000/api/corregir-lote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ export default function Home() {
       console.log('Enviando datos al backend...');
       console.log(employeeId, activityId, subActivityId, lotId);
 
-      const response = await fetch('http://localhost:5000/register-activity', {
+      const response = await fetch('http://localhost:7000/register-activity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -180,7 +180,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const socket = io('http://localhost:5000'); // Conectar con el backend
+    const socket = io('http://localhost:7000'); // Conectar con el backend
 
     socket.on('empleado-reconocido', (data) => {
       setActivityData((prev) => ({ ...prev, employeeId: data.employeeId, hasSentData: false }));
