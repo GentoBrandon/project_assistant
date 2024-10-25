@@ -117,11 +117,24 @@ const updateEmployee = async (body, id) => {
     throw error;
   }
 };
-
+const getAllEmployees = async (req,res,next)=>{
+  try {
+    const resultCounter = await employedModel.countEmployees();
+    if(!resultCounter.success){
+      const error = new Error('Error al contar empleados');
+      error.status = 400;
+      throw error;
+    }
+    return res.status(200).json(resultCounter.data);
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   insertData,
   getData,
   deleteEmployed,
   searchEmployed,
   updateEmployee,
+  getAllEmployees
 };

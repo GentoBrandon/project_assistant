@@ -5,6 +5,7 @@ const {
   getData,
   searchEmployed,
   updateEmployee,
+  getAllEmployees
 } = require('../controllers/employedController');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
@@ -101,5 +102,5 @@ router.patch(
     }
   }
 );
-
+router.get('/get-all-employees',getAllEmployees);
 module.exports = router;
