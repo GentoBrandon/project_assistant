@@ -18,7 +18,9 @@
     "nextjs-toast-notify": "^1.27.0",
     "react": "^18",
     "react-bootstrap": "^2.10.5",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "socket.io": "^4.8.0",
+    "socket.io-client": "^4.8.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
