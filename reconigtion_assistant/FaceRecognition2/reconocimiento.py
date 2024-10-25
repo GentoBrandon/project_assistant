@@ -83,7 +83,7 @@ model_filename = 'modelo_reconocimiento.yml'
 employee_names_filename = 'employee_names.npy'
 size = 4
 im_width, im_height = (112, 92)
-backend_url = 'http://localhost:5000/api/empleado-reconocido'
+backend_url = 'http://localhost:7000/api/empleado-reconocido'
 # Función para cargar el modelo entrenado
 def cargar_modelo():
     if os.path.exists(model_filename) and os.path.exists(employee_names_filename):
