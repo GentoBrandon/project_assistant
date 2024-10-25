@@ -27,6 +27,7 @@ const insertData = async (body) => {
     console.log('Ingresando');
     const result = await employedModel.insertData(body);
   
+  
     if (!result.success) {
       const error = new Error('Error al insertar');
       error.status = 400;
@@ -40,6 +41,15 @@ const insertData = async (body) => {
      await runPythonProcess(captureScriptPath, [result.id.id]);
      await runPythonProcess(trainModelScriptPath, []);
     console.log('Empleado Ingresado Ingresado');
+    // Ejecutar el script de Python para capturar las fotos, pasando el ID del empleado
+    await runPythonProcess('capture.py', [result.id.id]);
+
+    console.log('Fotos capturadas correctamente.');
+
+    // Actualizar el modelo con las nuevas imágenes disponibles
+    await runPythonProcess('train_model.py', []);
+
+    console.log('Modelo actualizado correctamente.');
     return { status: 200, msg: 'Empleado Registrado con exito' };
   } catch (error) {
     throw error;
