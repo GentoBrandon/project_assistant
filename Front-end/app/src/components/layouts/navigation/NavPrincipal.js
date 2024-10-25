@@ -32,8 +32,12 @@ function NavPrincipal() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Registrar</Nav.Link>
-            <Nav.Link href="#link">Reportes</Nav.Link>
+            <NavDropdown title="Asistente" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/Tables/viewRegister">
+                  Registros
+                </NavDropdown.Item>
+              </NavDropdown>
+
 
             <NavDropdown title="Reportes" id="basic-nav-dropdown">
               <NavDropdown.Item href="/Tables/viewEmployeds">
