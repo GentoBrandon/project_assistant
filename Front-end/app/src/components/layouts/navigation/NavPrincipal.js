@@ -28,7 +28,7 @@ function NavPrincipal() {
           <Image src="/logo-anacafe.webp" thumbnail loading="lazy" />
       </Col>
       <Container>
-        <Navbar.Brand href="#home">Inicio</Navbar.Brand>
+        <Navbar.Brand href="/dashboard">Inicio</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -36,26 +36,32 @@ function NavPrincipal() {
             <Nav.Link href="#link">Reportes</Nav.Link>
 
             <NavDropdown title="Reportes" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/viewEmployeds">
+              <NavDropdown.Item href="/Tables/viewEmployeds">
                 Empleados
               </NavDropdown.Item>
-              <NavDropdown.Item href="#">
+              <NavDropdown.Item href="/Tables/viewLots">
                 Lotes
               </NavDropdown.Item>
-              <NavDropdown.Item href="/activities">
-                Empleados
+              <NavDropdown.Item href="/Tables/viewActivities">
+                Actividades
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/Tables/viewSubActivities">
+                Sub-actividades
               </NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title="Registrar" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/registerEmployed">
+              <NavDropdown.Item href="/registers/registerEmployed">
                 Empleados
               </NavDropdown.Item>
-              <NavDropdown.Item href="/registerLots">
+              <NavDropdown.Item href="/registers/registerLots">
               Lotes
               </NavDropdown.Item>
-              <NavDropdown.Item href="/activities">
+              <NavDropdown.Item href="/registers/activities">
                 Actividad
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/registers/subActivities">
+                Sub-Actividad
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
