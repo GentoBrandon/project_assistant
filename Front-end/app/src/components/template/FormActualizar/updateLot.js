@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import styles from '../../../styles/FormStyles.module.css';
 import Buttons from '@/components/layouts/InputData/Buttons';   
 import axios from 'axios';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+
 
 function UpdateLots({edit}){
     const router = useRouter();
@@ -45,11 +48,24 @@ function UpdateLots({edit}){
             }
         })
             .then(() => {
-                console.log('Lote actualizado con éxito');
                 router.push('/Tables/viewLots'); // Redirigir a la página principal
+                toast.success("¡Lote actualizada con éxito!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "bottom-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             })
             .catch(error => {
                 console.error('Error al actualizar los datos:', error);
+                toast.error("¡Error al actualizr!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "bottom-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             });
     };
 
