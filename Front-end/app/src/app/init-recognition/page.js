@@ -1,5 +1,9 @@
 'use client';
 import { useState } from 'react';
+import styles from '@/styles/Login.module.css';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+
 
 export default function Home() {
   const [isRecognizing, setIsRecognizing] = useState(false);
@@ -15,14 +19,32 @@ export default function Home() {
 
       if (response.ok) {
         setIsRecognizing(true);
-        alert('Reconocimiento facial iniciado correctamente.');
+        toast.success("¡El reconocimiento facial, se inicio correctamente!", {
+          duration: 4000,
+          progress: true,
+          position: "top-center",
+          transition: "bounceIn",
+          sonido: true,
+        });
       } else {
         const data = await response.json();
-        alert(`Error: ${data.message}`);
+        toast.error(`Error: ${data.message}`, {
+          duration: 4000,
+          progress: true,
+          position: "top-center",
+          transition: "bounceIn",
+          sonido: true,
+        });
       }
     } catch (error) {
       console.error('Error al iniciar el reconocimiento facial:', error);
-      alert('Error al iniciar el reconocimiento facial.');
+      toast.error('¡Error al iniciar el reconocimiento facial.!', {
+        duration: 4000,
+        progress: true,
+        position: "top-center",
+        transition: "bounceIn",
+        sonido: true,
+      });
     }
   };
 
@@ -37,27 +59,55 @@ export default function Home() {
 
       if (response.ok) {
         setIsRecognizing(false);
-        alert('Reconocimiento facial detenido correctamente.');
+        toast.warning("¡El reconocimiento facial, se detuvo correctamente!", {
+          duration: 4000,
+          progress: true,
+          position: "top-center",
+          transition: "bounceIn",
+          sonido: true,
+        });
       } else {
         const data = await response.json();
-        alert(`Error: ${data.message}`);
+        toast.warning(`Error: ${data.message}`, {
+          duration: 4000,
+          progress: true,
+          position: "top-center",
+          transition: "bounceIn",
+          sonido: true,
+        });
       }
     } catch (error) {
       console.error('Error al detener el reconocimiento facial:', error);
-      alert('Error al detener el reconocimiento facial.');
+      toast.error('Error al detener el reconocimiento facial', {
+        duration: 4000,
+        progress: true,
+        position: "top-center",
+        transition: "bounceIn",
+        sonido: true,
+      });
     }
   };
 
   return (
-    <div style={{ textAlign: 'center', paddingTop: '50px' }}>
-      <h1>Reconocimiento Facial desde el Frontend</h1>
+    <div className={styles.containerRec}>
+      <div className={styles.BoxRec}>
+          <img
+              src="/logo-anacafe.webp"
+              alt="Anacafé Guatemala"
+              className={styles.logo}
+            />
+          <h1 className={styles.titleRec}>Reconocimiento Facial</h1>
 
-      <button onClick={startRecognition} disabled={isRecognizing} style={{ margin: '10px' }}>
-        Iniciar Reconocimiento Facial
-      </button>
-      <button onClick={stopRecognition} disabled={!isRecognizing} style={{ margin: '10px' }}>
-        Detener Reconocimiento Facial
-      </button>
+          <div className={styles.btnGroup}>
+            <button onClick={startRecognition} disabled={isRecognizing} className={styles.btnInit}>
+              Iniciar 
+            </button>
+            
+            <button onClick={stopRecognition} disabled={!isRecognizing} className={styles.btnStop}>
+              Detener 
+            </button>
+          </div>
+      </div>
     </div>
   );
 }
