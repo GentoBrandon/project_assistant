@@ -80,7 +80,7 @@ const deletedEmployeeActivity = async (req,res,next)=>{
 }
 const getCountAllRegActivities = async(req,res,next)=>{
     try {
-        const resultCount = await employeActivityModel.getCountAllRegActivities();
+        const resultCount = await employeActivityModel.countAllRegActivities();
         if(!resultCount.success){
             const error = new Error(resultCount.message)
             error.status = 400
