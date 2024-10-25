@@ -74,7 +74,7 @@ import sys
 employee_id = sys.argv[1]
 
 # Rutas absolutas
-base_path = r'C:\Users\KEVIN\Documents\Proyectos_Practica\JavaScript\Proyecto_analisis_Asistent\project_assistant\reconigtion_assistant\FaceRecognition2'
+base_path = r'C:\\Proyectos\\project_assistant\\reconigtion_assistant\\FaceRecognition2'
 dir_faces = os.path.join(base_path, 'att_faces', 'orl_faces')
 path = os.path.join(dir_faces, employee_id)
 
@@ -88,7 +88,6 @@ face_cascade = cv2.CascadeClassifier(cascade_path)
 
 # Inicializar la cámara y el modelo de reconocimiento facial
 cap = cv2.VideoCapture(0)
-
 # Comprobar si la cámara se abrió correctamente
 if not cap.isOpened():
     print("No se pudo abrir la cámara.")

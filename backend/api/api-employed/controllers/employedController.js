@@ -1,6 +1,8 @@
 const employedModel = require('../models/employedModel');
 const {spawn} = require('child_process');
-const scriptFolder = 'C:\\Users\\KEVIN\\Documents\\Proyectos_Practica\\JavaScript\\Proyecto_analisis_Asistent\\project_assistant\\reconigtion_assistant\\FaceRecognition2';
+const scriptFolder = 'C:\\Proyectos\\project_assistant\\reconigtion_assistant\\FaceRecognition2';
+
+
 const runPythonProcess = (script, args = []) => {
   return new Promise((resolve, reject) => {
     const process = spawn('python', [`${scriptFolder}\\${script}`, ...args]);
