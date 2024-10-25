@@ -26,7 +26,6 @@ function DashboardP() {
         axios.get('http://localhost:5000/api/lots/get-count-lots')
             .then(response => {
                 setLotsCount(response.data.count);
-                console.log("lotes", response.data.count);
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
@@ -35,7 +34,6 @@ function DashboardP() {
         axios.get('http://localhost:5000/api/activities/get-count-activities')
             .then(response => {
                 setActivitiesCount(response.data.count);
-                console.log("Actividades", response.data.count);
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
@@ -44,7 +42,6 @@ function DashboardP() {
         axios.get('http://localhost:5000/api/sub-activities/get-count-sub-activities')
             .then(response => {
                 setSubActivitiesCount(response.data.count);
-                console.log("SubActividades", response.data.count);
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
@@ -52,10 +49,7 @@ function DashboardP() {
 
         axios.get('http://localhost:5000/api/employees-activities/get-count-employees-activities')
             .then(response => {
-                if (response.data.length > 0 && response.data[0].count) {
-                    setRegisterCount(response.data[0].count);
-                }
-                console.log("Registros", response.data);
+                setRegisterCount(response.data.count.count);
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
