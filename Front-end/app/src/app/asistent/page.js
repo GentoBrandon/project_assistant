@@ -1,103 +1,318 @@
-"use client"; // Aseguramos que solo se ejecute en el cliente
 
-import { useState, useEffect, useRef } from 'react';
+'use client';
+import { useEffect, useState, useRef } from 'react';
+import io from 'socket.io-client';
 
 export default function Home() {
   const [recognizedEmployee, setRecognizedEmployee] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef(null);
-  const isRecognitionActive = useRef(false);  // Controlaremos si el reconocimiento ya está activo
+  const [activityData, setActivityData] = useState({
+    employeeId: 0,
+    activityId: 0,
+    subActivityId: 0,
+    lotId: 0,
+    hasSentData: false
+  });
+  const isSendingDataRef = useRef(false);
 
-  const step = useRef(1);
-  const name = useRef('');
-  const surname = useRef('');
-  const activity = useRef('');
+  // Función para enviar el texto transcrito al backend para corrección
+  const correctTextWithOpenAI = async (transcript) => {
+    try {
+      const response = await fetch('http://localhost:7000/corregir-texto', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ transcript })
+      });
 
-  // Función para que el asistente hable
-  const speak = (text) => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
-      window.speechSynthesis.speak(utterance);
+      if (!response.ok) {
+        const errorData = await response.json();
+        setChatHistory((prev) => [
+          ...prev,
+          `Sistema: Error - ${errorData.error}`
+        ]);
+        const errorUtterance = new SpeechSynthesisUtterance(`Error: ${errorData.error}. Por favor, intenta decir la actividad nuevamente.`);
+        errorUtterance.onend = () => {
+          startListening(); // Reiniciar la escucha después del error
+        };
+        window.speechSynthesis.speak(errorUtterance);
+        return null;
+      }
+
+      const data = await response.json();
+      setActivityData((prev) => ({
+        ...prev,
+        activityId: data.activity,
+        subActivityId: data.subActivity,
+        hasSentData: false
+      }));
+
+      return {
+        correctedText: data.correctedText,
+        subActivity: data.subActivity,
+        activity: data.activity
+      };
+    } catch (error) {
+      console.error('Error al corregir el texto:', error);
+      setChatHistory((prev) => [
+        ...prev,
+        'Sistema: Error inesperado al procesar el texto. Por favor, intenta decir la actividad nuevamente.'
+      ]);
+      const errorUtterance = new SpeechSynthesisUtterance('Error inesperado al procesar el texto. Por favor, intenta decir la actividad nuevamente.');
+      errorUtterance.onend = () => {
+        startListening(); // Reiniciar la escucha después del error inesperado
+      };
+      window.speechSynthesis.speak(errorUtterance);
+      return null;
     }
   };
 
-  // Función que maneja el texto hablado por el usuario
-  const handleSpokenText = (spokenText) => {
-    if (step.current === 1) {
-      name.current = spokenText;
-      setResponse(`Hola, ${spokenText}. ¿Cuál es tu apellido?`);
-      speak(`Hola, ${spokenText}. ¿Cuál es tu apellido?`);
-      step.current = 2; // Pasamos al siguiente paso
-      setTimeout(() => startListening(), 4000); // Aumentamos el tiempo de espera a 4 segundos
-    } else if (step.current === 2) {
-      surname.current = spokenText;
-      setResponse(`Encantado de conocerte, ${name.current} ${surname.current}. ¿Qué actividad realizaste hoy?`);
-      speak(`Encantado de conocerte, ${name.current} ${surname.current}. ¿Qué actividad realizaste hoy?`);
-      step.current = 3; // Pasamos al siguiente paso
-      setTimeout(() => startListening(), 5000); // Aumentamos el tiempo de espera a 5 segundos
-    } else if (step.current === 3) {
-      activity.current = spokenText;
-      setResponse(`Entendido, tu actividad fue: ${spokenText}. Guardando en la base de datos...`);
-      speak(`Entendido, tu actividad fue: ${spokenText}. Guardando en la base de datos...`);
-      step.current = 4;
-      saveData(); // Simulamos el guardado de datos
+  // Función para corregir el lote con OpenAI
+  const correctLoteWithOpenAI = async (transcript) => {
+    try {
+      const response = await fetch('http://localhost:7000/api/corregir-lote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ transcript })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setChatHistory((prev) => [
+          ...prev,
+          `Sistema: Error - ${errorData.error}`
+        ]);
+        const errorUtterance = new SpeechSynthesisUtterance(`Error: ${errorData.error}. Por favor, intenta decir el lote nuevamente.`);
+        errorUtterance.onend = () => {
+          startListeningForLote(); // Reiniciar la escucha después del error
+        };
+        window.speechSynthesis.speak(errorUtterance);
+        return null;
+      }
+
+      const data = await response.json();
+      setActivityData((prev) => ({
+        ...prev,
+        lotId: data.id,
+        hasSentData: false
+      }));
+      return data.id;
+    } catch (error) {
+      console.error('Error al corregir el lote:', error);
+      setChatHistory((prev) => [
+        ...prev,
+        'Sistema: Error inesperado al procesar el lote. Por favor, intenta decir el lote nuevamente.'
+      ]);
+      const errorUtterance = new SpeechSynthesisUtterance('Error inesperado al procesar el lote. Por favor, intenta decir el lote nuevamente.');
+      errorUtterance.onend = () => {
+        startListeningForLote(); // Reiniciar la escucha después del error inesperado
+      };
+      window.speechSynthesis.speak(errorUtterance);
+      return null;
     }
   };
 
-  // Función para simular el guardado en la base de datos
-  const saveData = () => {
-    setTimeout(() => {
-      setResponse('Datos guardados exitosamente.');
-      speak('Datos guardados exitosamente.');
-      resetAssistant(); // Reiniciamos el asistente después de guardar
-    }, 2000);
-  };
+  // Nueva función para enviar la actividad al backend
+  const sendActivityDataToBackend = async ({ employeeId, activityId, subActivityId, lotId }) => {
+    if (isSendingDataRef.current) return;
+    isSendingDataRef.current = true;
+    try {
+      console.log('Enviando datos al backend...');
+      console.log(employeeId, activityId, subActivityId, lotId);
 
-  // Función para reiniciar el asistente
-  const resetAssistant = () => {
-    step.current = 1; // Reiniciamos los pasos
-    name.current = '';
-    surname.current = '';
-    activity.current = '';
-    setResponse('Presiona el botón para iniciar el asistente');
-    setIsListening(false);
-    isRecognitionActive.current = false;  // Marcamos que el reconocimiento ha terminado
-  };
+      const response = await fetch('http://localhost:7000/register-activity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          employeeId: employeeId,
+          activityId: activityId,
+          subActivityId: subActivityId,
+          lotId: lotId
+        })
+      });
 
-  // Función para iniciar el reconocimiento de voz
-  const startListening = () => {
-    if (recognitionRef.current && !isRecognitionActive.current) {
-      recognitionRef.current.start(); // Iniciamos el reconocimiento
-      setIsListening(true);
-      isRecognitionActive.current = true; // Marcamos que el reconocimiento está activo
+      if (!response.ok) {
+        setChatHistory((prev) => [
+          ...prev,
+          'Sistema: Error al guardar la actividad. Por favor, intenta nuevamente.'
+        ]);
+        const errorUtterance = new SpeechSynthesisUtterance('Error al guardar la actividad. Por favor, intenta nuevamente.');
+        window.speechSynthesis.speak(errorUtterance);
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setChatHistory((prev) => [
+        ...prev,
+        `Sistema: Los datos de la actividad y lote han sido registrados con éxito.`
+      ]);
+
+      const confirmationUtterance = new SpeechSynthesisUtterance('Los datos de la actividad y lote han sido registrados con éxito.');
+      window.speechSynthesis.speak(confirmationUtterance);
+    } catch (error) {
+      console.error('Error al enviar datos al backend:', error);
+      setChatHistory((prev) => [
+        ...prev,
+        'Sistema: Error inesperado al guardar la actividad. Por favor, intenta nuevamente.'
+      ]);
+      const errorUtterance = new SpeechSynthesisUtterance('Error inesperado al guardar la actividad. Por favor, intenta nuevamente.');
+      window.speechSynthesis.speak(errorUtterance);
+    } finally {
+      // Reiniciar el estado después de enviar los datos
+      setRecognizedEmployee(null);
+      setActivityData({
+        employeeId: 0,
+        activityId: 0,
+        subActivityId: 0,
+        lotId: 0,
+        hasSentData: false
+      });
+      setChatHistory([]);
+      isSendingDataRef.current = false;
     }
   };
 
-  // Inicialización del reconocimiento de voz solo en el cliente
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false; // Detenemos el reconocimiento después de cada frase
-        recognition.interimResults = false;
-        recognition.lang = 'es-ES';
+    const socket = io('http://localhost:7000'); // Conectar con el backend
 
-        recognition.onstart = () => {
-          isRecognitionActive.current = true; // Cuando comienza, marcamos como activo
-        };
+    socket.on('empleado-reconocido', (data) => {
+      setActivityData((prev) => ({ ...prev, employeeId: data.employeeId, hasSentData: false }));
+      setRecognizedEmployee(data);
+      setChatHistory((prev) => [
+        ...prev,
+        `Sistema: Hola ${data.employeeName}, ¿Qué actividad realizaste hoy?`
+      ]);
 
-        recognition.onresult = (event) => {
-          const spokenText = event.results[0][0].transcript;
-          handleSpokenText(spokenText); // Procesamos el texto hablado
-        };
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(`Hola ${data.employeeName}, ¿Qué actividad realizaste hoy?`);
 
-        recognition.onend = () => {
-          setIsListening(false);
-          isRecognitionActive.current = false; // Cuando termina, marcamos como inactivo
-        };
+      utterance.onend = () => {
+        startListening();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const { employeeId, activityId, subActivityId } = activityData;
+    if (employeeId !== 0 && activityId !== 0 && subActivityId !== 0) {
+      setActivityData((prev) => ({ ...prev, hasSentData: false }));
+    }
+  }, [activityData.employeeId, activityData.activityId, activityData.subActivityId]);
+
+  useEffect(() => {
+    const { employeeId, activityId, subActivityId, lotId, hasSentData } = activityData;
+    if (employeeId !== 0 && activityId !== 0 && subActivityId !== 0 && lotId !== 0 && !hasSentData && !isSendingDataRef.current) {
+      setActivityData((prev) => ({ ...prev, hasSentData: true })); // Marcar como enviado antes de iniciar el proceso
+      sendActivityDataToBackend({ employeeId, activityId, subActivityId, lotId });
+    }
+  }, [activityData.lotId]); // Dependencia específica para enviar al backend
+
+  const startListening = () => {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      alert('Tu navegador no soporta el reconocimiento de voz');
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+    setIsListening(true);
+
+    recognition.onresult = async (event) => {
+      const transcript = event.results[0][0].transcript;
+
+      const correctedText = await correctTextWithOpenAI(transcript);
+
+      if (!correctedText) {
+        setIsListening(false);
+        return; // Detener si no se pudo corregir la actividad
+      }
+
+      setChatHistory((prev) => [
+        ...prev,
+        `Empleado: ${transcript}`,
+        `Sistema: Se ha guardado la actividad corregida: ${correctedText.correctedText}`
+      ]);
+
+      const saveUtterance = new SpeechSynthesisUtterance(`Se ha guardado la actividad: ${correctedText.correctedText}`);
+      saveUtterance.onend = () => {
+        askForLote(); // Preguntar en qué lote se realizó la actividad
+      };
+      window.speechSynthesis.speak(saveUtterance);
+
+      setIsListening(false);
+    };
+
+    
+    recognition.onerror = (event) => {
+      console.error('Error en el reconocimiento de voz:', event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+  };
+
+  const askForLote = () => {
+    const loteQuestion = new SpeechSynthesisUtterance('¿En qué lote realizaste la actividad?');
+    loteQuestion.onend = () => {
+      startListeningForLote();
+    };
+    window.speechSynthesis.speak(loteQuestion);
+  };
+
+  const startListeningForLote = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+    setIsListening(true);
+
+    recognition.onresult = async (event) => {
+      const transcript = event.results[0][0].transcript;
+
+      const correctedLoteId = await correctLoteWithOpenAI(transcript);
+
+      if (!correctedLoteId) {
+        setIsListening(false);
+        return; // Detener si no se pudo corregir el lote
+      }
+
+      setChatHistory((prev) => [
+        ...prev,
+        `Lote: ${transcript}`,
+        `Sistema: El lote ha sido guardado.`
+      ]);
+
+      const loteSaveUtterance = new SpeechSynthesisUtterance(`El lote ha sido guardado.`);
+      loteSaveUtterance.onend = () => {
+        setActivityData((prev) => ({ ...prev, lotId: correctedLoteId }));
+      };
+      window.speechSynthesis.speak(loteSaveUtterance);
+
+      setIsListening(false);
+    };
 
     recognition.onerror = (event) => {
       console.error('Error en el reconocimiento de voz:', event.error);
@@ -129,4 +344,5 @@ export default function Home() {
         ))}
       </div>
     </div>
-  )
+  );
+}
