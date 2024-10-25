@@ -146,7 +146,7 @@ while True:
             print("Persona desconocida")
 
     if recognized_id is not None:
-        time.sleep(30)
+        time.sleep(40)
         recognized_id = None  # Reiniciar para buscar un nuevo empleado
 
 cap.release()

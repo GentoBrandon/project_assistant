@@ -113,7 +113,7 @@ import os
 import numpy as np
 
 # Ruta base del proyecto
-base_path = r'C:\\Proyectos\\project_assistant\\reconigtion_assistant\\FaceRecognition2'
+base_path = r'C:\\Users\\KEVIN\\Documents\\Proyectos_Practica\\JavaScript\\Proyecto_analisis_Asistent\\project_assistant\\reconigtion_assistant\\FaceRecognition2'
 
 # Rutas absolutas del directorio de fotos y el archivo del modelo
 dir_faces = os.path.join(base_path, 'att_faces', 'orl_faces')

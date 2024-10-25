@@ -23,6 +23,8 @@ node_modules
 employee_names.pny
 modelo_reconocimiento.yml
 capture.py
+reconocimiento.py
+train_model.py
 # directorios #
 
 /__pycache__/*

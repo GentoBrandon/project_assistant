@@ -74,7 +74,7 @@ import sys
 employee_id = sys.argv[1]
 
 # Rutas absolutas
-base_path = r'C:\\Proyectos\\project_assistant\\reconigtion_assistant\\FaceRecognition2'
+base_path = r'C:\\Users\\KEVIN\\Documents\\Proyectos_Practica\\JavaScript\\Proyecto_analisis_Asistent\\project_assistant\\reconigtion_assistant\\FaceRecognition2'
 dir_faces = os.path.join(base_path, 'att_faces', 'orl_faces')
 path = os.path.join(dir_faces, employee_id)
 
@@ -135,3 +135,4 @@ while count < 100:
 
 cap.release()
 cv2.destroyAllWindows()
+sys.exit()
