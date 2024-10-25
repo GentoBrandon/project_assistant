@@ -1,6 +1,6 @@
 const employedModel = require('../models/employedModel');
 const {spawn} = require('child_process');
-const scriptFolder = 'C:\\Proyectos\\project_assistant\\reconigtion_assistant\\FaceRecognition2';
+const scriptFolder = 'C:\\Users\\KEVIN\\Documents\\Proyectos_Practica\\JavaScript\\Proyecto_analisis_Asistent\\project_assistant\\reconigtion_assistant\\FaceRecognition2';
 
 
 const runPythonProcess = (script, args = []) => {
@@ -48,12 +48,7 @@ const insertData = async (body) => {
 
     console.log('Modelo actualizado correctamente.');
     // Ejecutar el script de Python para capturar las fotos, pasando el ID del empleado
-    await runPythonProcess('capture.py', [result.id.id]);
 
-    console.log('Fotos capturadas correctamente.');
-
-    // Actualizar el modelo con las nuevas imágenes disponibles
-    await runPythonProcess('train_model.py', []);
 
     console.log('Modelo actualizado correctamente.');
     return { status: 200, msg: 'Empleado Registrado con exito' };
