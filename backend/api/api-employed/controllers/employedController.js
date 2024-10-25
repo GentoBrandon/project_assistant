@@ -1,15 +1,48 @@
 const employedModel = require('../models/employedModel');
+const {spawn} = require('child_process');
+const scriptFolder = 'C:\\Proyectos\\project_assistant\\reconigtion_assistant\\FaceRecognition2';
+const runPythonProcess = (script, args = []) => {
+  return new Promise((resolve, reject) => {
+    const process = spawn('python', [`${scriptFolder}\\${script}`, ...args]);
 
+    process.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    process.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    process.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Process exited with code ${code}`));
+      }
+    });
+  });
+};
 const insertData = async (body) => {
   try {
     console.log('Ingresando');
     const result = await employedModel.insertData(body);
+  
     if (!result.success) {
       const error = new Error('Error al insertar');
       error.status = 400;
       throw error;
     }
+
     console.log('Empleado Ingresado Ingresado');
+    // Ejecutar el script de Python para capturar las fotos, pasando el ID del empleado
+    await runPythonProcess('capture.py', [result.id.id]);
+
+    console.log('Fotos capturadas correctamente.');
+
+    // Actualizar el modelo con las nuevas imágenes disponibles
+    await runPythonProcess('train_model.py', []);
+
+    console.log('Modelo actualizado correctamente.');
     return { status: 200, msg: 'Empleado Registrado con exito' };
   } catch (error) {
     throw error;
