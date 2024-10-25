@@ -6,8 +6,6 @@ import styles from '@/styles/StyleReco.module.css';
 import { toast } from "nextjs-toast-notify";
 import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 
-
-
 export default function Home() {
   const [recognizedEmployee, setRecognizedEmployee] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
@@ -21,7 +19,6 @@ export default function Home() {
   });
   const isSendingDataRef = useRef(false);
 
-  // Función para enviar el texto transcrito al backend para corrección
   const correctTextWithOpenAI = async (transcript) => {
     try {
       const response = await fetch('http://localhost:7000/corregir-texto', {
@@ -40,7 +37,7 @@ export default function Home() {
         ]);
         const errorUtterance = new SpeechSynthesisUtterance(`Error: ${errorData.error}. Por favor, intenta decir la actividad nuevamente.`);
         errorUtterance.onend = () => {
-          startListening(); // Reiniciar la escucha después del error
+          startListening(); 
         };
         window.speechSynthesis.speak(errorUtterance);
         return null;
@@ -67,14 +64,13 @@ export default function Home() {
       ]);
       const errorUtterance = new SpeechSynthesisUtterance('Error inesperado al procesar el texto. Por favor, intenta decir la actividad nuevamente.');
       errorUtterance.onend = () => {
-        startListening(); // Reiniciar la escucha después del error inesperado
+        startListening(); 
       };
       window.speechSynthesis.speak(errorUtterance);
       return null;
     }
   };
 
-  // Función para corregir el lote con OpenAI
   const correctLoteWithOpenAI = async (transcript) => {
     try {
       const response = await fetch('http://localhost:7000/api/corregir-lote', {
@@ -93,7 +89,7 @@ export default function Home() {
         ]);
         const errorUtterance = new SpeechSynthesisUtterance(`Error: ${errorData.error}. Por favor, intenta decir el lote nuevamente.`);
         errorUtterance.onend = () => {
-          startListeningForLote(); // Reiniciar la escucha después del error
+          startListeningForLote();
         };
         window.speechSynthesis.speak(errorUtterance);
         return null;
@@ -114,32 +110,23 @@ export default function Home() {
       ]);
       const errorUtterance = new SpeechSynthesisUtterance('Error inesperado al procesar el lote. Por favor, intenta decir el lote nuevamente.');
       errorUtterance.onend = () => {
-        startListeningForLote(); // Reiniciar la escucha después del error inesperado
+        startListeningForLote(); 
       };
       window.speechSynthesis.speak(errorUtterance);
       return null;
     }
   };
 
-  // Nueva función para enviar la actividad al backend
   const sendActivityDataToBackend = async ({ employeeId, activityId, subActivityId, lotId }) => {
     if (isSendingDataRef.current) return;
     isSendingDataRef.current = true;
     try {
-      console.log('Enviando datos al backend...');
-      console.log(employeeId, activityId, subActivityId, lotId);
-
       const response = await fetch('http://localhost:7000/register-activity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          employeeId: employeeId,
-          activityId: activityId,
-          subActivityId: subActivityId,
-          lotId: lotId
-        })
+        body: JSON.stringify({ employeeId, activityId, subActivityId, lotId })
       });
 
       if (!response.ok) {
@@ -149,23 +136,14 @@ export default function Home() {
         ]);
         const errorUtterance = new SpeechSynthesisUtterance('Error al guardar la actividad. Por favor, intenta nuevamente.');
         window.speechSynthesis.speak(errorUtterance);
-        toast.error(`Error: ${errorUtterance}`, {
-          duration: 1500,
-          progress: true,
-          position: "top-center",
-          transition: "bounceIn",
-          sonido: true,
-        });
         return;
       }
 
       const data = await response.json();
-      console.log(data);
       setChatHistory((prev) => [
         ...prev,
         `Sistema: Los datos de la actividad y lote han sido registrados con éxito.`
       ]);
-
       const confirmationUtterance = new SpeechSynthesisUtterance('Los datos de la actividad y lote han sido registrados con éxito.');
       window.speechSynthesis.speak(confirmationUtterance);
     } catch (error) {
@@ -177,7 +155,6 @@ export default function Home() {
       const errorUtterance = new SpeechSynthesisUtterance('Error inesperado al guardar la actividad. Por favor, intenta nuevamente.');
       window.speechSynthesis.speak(errorUtterance);
     } finally {
-      // Reiniciar el estado después de enviar los datos
       setRecognizedEmployee(null);
       setActivityData({
         employeeId: 0,
@@ -192,10 +169,16 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const socket = io('http://localhost:7000'); // Conectar con el backend
+    const socket = io('http://localhost:7000');
 
     socket.on('empleado-reconocido', (data) => {
-      setActivityData((prev) => ({ ...prev, employeeId: data.employeeId, hasSentData: false }));
+      setActivityData({
+        employeeId: data.employeeId,
+        activityId: 0,
+        subActivityId: 0,
+        lotId: 0,
+        hasSentData: false
+      });
       setRecognizedEmployee(data);
       setChatHistory((prev) => [
         ...prev,
@@ -204,11 +187,9 @@ export default function Home() {
 
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(`Hola ${data.employeeName}, ¿Qué actividad realizaste hoy?`);
-
       utterance.onend = () => {
         startListening();
       };
-
       window.speechSynthesis.speak(utterance);
     });
 
@@ -233,11 +214,6 @@ export default function Home() {
   }, [activityData.lotId]); // Dependencia específica para enviar al backend
 
   const startListening = () => {
-    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-      alert('Tu navegador no soporta el reconocimiento de voz');
-      return;
-    }
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = 'es-ES';
@@ -249,12 +225,11 @@ export default function Home() {
 
     recognition.onresult = async (event) => {
       const transcript = event.results[0][0].transcript;
-
       const correctedText = await correctTextWithOpenAI(transcript);
 
       if (!correctedText) {
         setIsListening(false);
-        return; // Detener si no se pudo corregir la actividad
+        return;
       }
 
       setChatHistory((prev) => [
@@ -265,22 +240,15 @@ export default function Home() {
 
       const saveUtterance = new SpeechSynthesisUtterance(`Se ha guardado la actividad: ${correctedText.correctedText}`);
       saveUtterance.onend = () => {
-        askForLote(); // Preguntar en qué lote se realizó la actividad
+        askForLote();
       };
       window.speechSynthesis.speak(saveUtterance);
 
       setIsListening(false);
     };
 
-    
-    recognition.onerror = (event) => {
-      console.error('Error en el reconocimiento de voz:', event.error);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
   };
 
   const askForLote = () => {
@@ -303,12 +271,11 @@ export default function Home() {
 
     recognition.onresult = async (event) => {
       const transcript = event.results[0][0].transcript;
-
       const correctedLoteId = await correctLoteWithOpenAI(transcript);
 
       if (!correctedLoteId) {
         setIsListening(false);
-        return; // Detener si no se pudo corregir el lote
+        return;
       }
 
       setChatHistory((prev) => [
@@ -326,14 +293,8 @@ export default function Home() {
       setIsListening(false);
     };
 
-    recognition.onerror = (event) => {
-      console.error('Error en el reconocimiento de voz:', event.error);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
   };
 
   return (
@@ -362,9 +323,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-
-
       </div>
     </div>
   );
-}
+} 
