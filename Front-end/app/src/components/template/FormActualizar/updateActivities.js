@@ -6,6 +6,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import { useRouter } from 'next/navigation';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+
 
 
 function UpdateActivities({edit}){
@@ -44,11 +47,24 @@ function UpdateActivities({edit}){
             }
         })
             .then(() => {
-                console.log('Actividad actualizada con éxito');
+                toast.success("¡Actividad actualizada con éxito!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "bottom-center",
+                    transition: "bounceIn",
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>',
+                    sonido: true,
+                  });
                 router.push('/Tables/viewActivities'); // Redirigir a la página principal
             })
             .catch(error => {
-                console.error('Error al actualizar los datos:', error);
+                toast.error("¡Error al actualizar!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "bottom-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             });
     }
     return (
