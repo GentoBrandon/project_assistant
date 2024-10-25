@@ -12,9 +12,10 @@ function Registers (){
     const [data, setData] = useState([]);
     const router = useRouter();
     useEffect(() => {
-        axios.get('http://localhost:5000/api/employees-activities/get-count-employees-activities')
+        axios.get('http://localhost:5000/api/employees-activities/get-all')
             .then(response => {
-                setData(response.data.data);
+                setData(response.data);
+                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
@@ -29,17 +30,16 @@ function Registers (){
                 <th>Subactividad</th>
                 <th>Lote</th>
                 <th>Fecha</th>
-                <th>Acciones</th>
             </TheadTable>
             {Array.isArray(data) && data.map((item, index) => (
                 <TBodyTable key={index}>
                     <td>{index + 1}</td>
+                    <td>{item.employee_name}</td>
+                    <td>{item.name_activity}</td>
+                    <td>{item.name_sub_activity}</td>
                     <td>{item.name_lots}</td>
-                    <td>{item.area}</td>
-                    <td>
-                        <button className="btn btn-warning me-2" onClick={() => router.push(`/edits/editLot/${item.id}`)}>Editar</button>
-                        <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Eliminar</button>
-                    </td>
+                    <td>{item.date}</td>
+                    
                 </TBodyTable>
             ))}
         </Table>
