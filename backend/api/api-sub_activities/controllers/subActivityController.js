@@ -138,6 +138,20 @@ const searchActivity = async (req,res,next)=>{
         next(error)
     }
 }
+
+const getCountSubActivity = async (req,res,next)=>{
+    try {
+        const resultCount = await subActivityModel.countSubActivities();
+        if(!resultCount.success){
+            const error = new Error('Data empty');
+            error.status = 404;
+            throw error
+        }
+        return res.status(200).json(resultCount.data)
+    } catch (error) {
+        next(error);
+    }
+}
 module.exports= {
     insertSubActivity,
     getSubActivities,
@@ -145,5 +159,6 @@ module.exports= {
     deleteSubActivity,
     updateSubActivity,
     searcNameSubActivity,
-    searchActivity
+    searchActivity,
+    getCountSubActivity
 }

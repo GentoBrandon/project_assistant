@@ -151,6 +151,26 @@ const searchActivity = async (id_actividad) =>{
         
     }
 }
+
+const countSubActivities = async () => {
+    try {
+        const resultCount = await db('sub_activities').count('id');
+        if(!resultCount){
+            return {
+                success: false,
+            }
+        }
+        return {
+            success: true,
+            data : resultCount[0]
+        }
+    } catch (error) {
+        throw{
+            message: 'Error while count sub_activities',
+            stack : error.stack
+        }
+    }
+}
 module.exports = {
     insertSubActivity,
     getSubActivities,
@@ -158,5 +178,6 @@ module.exports = {
     deleteSubActivity,
     updateSubActivity,
     searcNameSubActivity,
-    searchActivity
+    searchActivity,
+    countSubActivities
 }
