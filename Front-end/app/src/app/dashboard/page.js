@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from 'next/navigation'; // Asegúrate de usar useRouter para el cliente
 import { useState } from "react";
 import MainLayout from "@/components/template/principal/MainLayouts";
+import DashboardP from "@/components/template/dashboard/DashboarP";
 
 function DashboardPage() {
   const router = useRouter();
@@ -38,9 +39,7 @@ function DashboardPage() {
   return (
     <div>
       <MainLayout>
-      <h1>Dashboard</h1>
-      
-      <button onClick={handleLogout}>Logout</button>
+        <DashboardP/>
       </MainLayout>
     
     </div>

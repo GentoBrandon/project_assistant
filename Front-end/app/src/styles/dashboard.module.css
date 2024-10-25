@@ -1,0 +1,104 @@
+.dashboardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.dashboardCard {
+    background-color: #b7fabd; /* Fondo claro */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    text-align: center;
+    flex: 1 1 calc(33% - 40px); /* Para tener tres columnas con espacio */
+    max-width: 30%; /* Limitar el ancho máximo */
+    min-width: 250px; /* Ancho mínimo para tarjetas pequeñas */
+}
+
+.dashboardCard h3 {
+    color: #4b6584; /* Texto principal en color gris oscuro */
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.dashboardCard h4 {
+    color: #2d98da; /* Número destacado */
+    font-size: 2rem;
+    margin: 0;
+}
+
+.dashboardHeader {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.dashboardCard:nth-child(1) h4 {
+    color: #26de81; /* Color para empleados */
+}
+
+.dashboardCard:nth-child(2) h4 {
+    color: #fed330; /* Color para lotes */
+}
+
+.dashboardCard:nth-child(3) h4 {
+    color: #eb3b5a; /* Color para actividades */
+}
+
+.dashboardCard:nth-child(4) h4 {
+    color: #45aaf2; /* Color para sub-actividades */
+}
+
+.dashboardCard:nth-child(5) h4 {
+    color: #a55eea; /* Color para registros */
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    gap: 20px;
+    margin-top: 20px;
+     /* Ocupa el 100% de la altura para centrar verticalmente */
+}
+
+.imageButton {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imageButton img {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.imageButton span {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.imageButton:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.imageButton:hover img {
+    transform: scale(1.1);
+}
+
+.imageButton:focus {
+    outline: none;
+}
+
+.imageButton img, .imageButton span {
+    pointer-events: none;
+}
