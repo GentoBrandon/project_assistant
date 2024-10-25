@@ -30,7 +30,20 @@ const inserNewEmployeeActivity = async (body) => {
 
 const getAllActivitiesEmployees = async ()=>{
     try {
-        const resultData = await knex('employees_activities').select('*');
+       /* const resultData = await knex('employees_activities').select('*');*/
+       const resultData = await knex('employees_activities')
+            .select(
+                'employed.name as employee_name',
+                'lots.name_lots',
+                'activities.name_activity',
+                'sub_activities.name_sub_activity',
+                'employees_activities.date' // Ejemplo de campo adicional
+            )
+            .join('employed', 'employees_activities.employee_id', 'employed.id')
+            .join('lots', 'employees_activities.lot_id', 'lots.id')
+            .join('activities', 'employees_activities.activity_id', 'activities.id')
+            .join('sub_activities', 'employees_activities.sub_activity_id', 'sub_activities.id');
+        
         if(!resultData){
             return {
                 success: false,
