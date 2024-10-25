@@ -105,10 +105,25 @@ const updateActivity = async (req, res, next) => {
     next(error);
   }
 };
+
+const getAllActivities = async (req,res,next)=>{
+  try{
+      const resultData = await activitiesModel.countActivities();
+      if(!resultData.success){
+        const error = new Error('Error while counting activities');
+        error.status = 404;
+        throw error;
+      }
+      return res.status(200).json(resultData.data)
+  }catch(error){
+    next(error);
+  }
+}
 module.exports = {
   getData,
   insertData,
   searchData,
   deletActivity,
   updateActivity,
+  getAllActivities
 };

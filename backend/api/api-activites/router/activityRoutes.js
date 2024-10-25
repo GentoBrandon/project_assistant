@@ -23,4 +23,5 @@ router.put(
   validatorActivity.inputIDBodyActivity(),
   activityController.updateActivity
 );
+router.get('/get-all-activity',activityController.getAllActivities)
 module.exports = router;
