@@ -6,6 +6,9 @@ import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TBodyTable from "@/components/layouts/InputData/TBodyTable";
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+
 
 
 function TablesLots (){
@@ -26,9 +29,22 @@ function TablesLots (){
         axios.delete(`http://localhost:5000/api/lots/deleteData/${id}`)
             .then(response => {
                 setData(data.filter(item => item.id !== id));
+                toast.success("¡Lote eliminado correctamente!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             })
             .catch(error => {
-                console.error('Error al eliminar el registro:', error);
+                toast.error("¡Lote eliminado correctamente!", {
+                    duration: 4000,
+                    progress: true,
+                    position: "top-center",
+                    transition: "bounceIn",
+                    sonido: true,
+                  });
             });
     };
     return (
