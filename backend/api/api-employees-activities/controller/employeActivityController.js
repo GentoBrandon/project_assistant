@@ -78,9 +78,23 @@ const deletedEmployeeActivity = async (req,res,next)=>{
         next(error);
     }
 }
+const getCountAllRegActivities = async(req,res,next)=>{
+    try {
+        const resultCount = await employeActivityModel.getCountAllRegActivities();
+        if(!resultCount.success){
+            const error = new Error(resultCount.message)
+            error.status = 400
+            throw error
+        }
+        return res.status(200).json({count: resultCount.data})
+    } catch (error) {
+        next(error);
+    }
+}
 module.exports = {
     createNewEmployeeActivity,
     getAllEmployeeActivities,
     updateEmployeeActivity,
-    deletedEmployeeActivity
+    deletedEmployeeActivity,
+    getAllEmployeeActivities
 }
