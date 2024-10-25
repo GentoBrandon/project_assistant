@@ -96,5 +96,5 @@ module.exports = {
     getAllEmployeeActivities,
     updateEmployeeActivity,
     deletedEmployeeActivity,
-    getAllEmployeeActivities
+    getCountAllRegActivities
 }

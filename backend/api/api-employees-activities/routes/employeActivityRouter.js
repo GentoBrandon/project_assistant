@@ -9,5 +9,5 @@ router.put('/update/:id',[
     validator.inputId()],employeActivityController.updateEmployeeActivity)
 
 router.delete('/delete/:id',validator.inputId(),employeActivityController.deletedEmployeeActivity)
-router.get('/get-count-employees-activities',employeActivityController.getAllEmployeeActivities)
+router.get('/get-count-employees-activities',employeActivityController.getCountAllRegActivities)
 module.exports = router
