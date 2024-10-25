@@ -138,7 +138,7 @@ const countActivities = async () =>{
     }
     return {
       success: true,
-      data : resultCounter
+      data : resultCounter[0]
     }
   } catch (error) {
     throw{

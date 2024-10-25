@@ -63,10 +63,31 @@ const deleteData = async (id) => {
   }
 };
 
+const countLots = async ()=>{
+  try {
+    const countLots = await knex('lots').count('id')
+    if(!countLots){
+      return {
+        success: false
+      }
+    }
+    return {
+      success: true,
+      data: countLots[0]
+    }
+  } catch (error) {
+    throw{
+      message: 'Error in count lots',
+      stack : error.stack
+    }
+  }
+}
+
 module.exports = {
   getData,
   getDataById,
   insertData,
   updateData,
   deleteData,
+  countLots
 };

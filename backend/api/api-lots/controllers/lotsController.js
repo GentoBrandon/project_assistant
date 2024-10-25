@@ -65,10 +65,24 @@ const deleteData = async (id) => {
   }
 };
 
+const countAllLots = async(req,res,next)=>{
+  try {
+    const resultCountLots = await lotsModel.countLots();
+    if(!resultCountLots.success){
+      const error = new Error('Data Empty');
+      error.status = 404;
+      throw error;
+    }
+    return res.status(200).json(resultCountLots.data);
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   getData,
   getDataById,
   insertData,
   updateData,
   deleteData,
+  countAllLots
 };
