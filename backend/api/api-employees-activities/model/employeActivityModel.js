@@ -99,9 +99,30 @@ const deleteEmployeeActivity = async (id) =>{
         }
 }
 }
+
+const countAllRegActivities = async () =>{
+    try {
+        const resultCount = await knex('employees_activities').count('id');
+        if(!resultCount){
+            return {
+                success: false
+            }
+        }
+        return { 
+            success: true,
+            data: resultCount[0]
+        }
+    } catch (error) {
+        throw{
+            message : 'Error to count the employees activity',
+            stack : error.stack   
+        }
+    }
+}
 module.exports = {
     inserNewEmployeeActivity,
     getAllActivitiesEmployees,
     editEmployeeActivity,
-    deleteEmployeeActivity
+    deleteEmployeeActivity,
+    countAllRegActivities
 }

@@ -87,4 +87,5 @@ router.delete(
   }
 );
 
+router.get('/get-count-lots',lotsController.countAllLots)
 module.exports = router;

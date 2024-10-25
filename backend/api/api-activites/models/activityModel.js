@@ -127,10 +127,32 @@ const updateActivity = async (id, body) => {
     };
   }
 };
+
+const countActivities = async () =>{
+  try {
+    const resultCounter = await knex('activities').count('id');
+    if(!resultCounter){
+      return {
+        success: false
+      }
+    }
+    return {
+      success: true,
+      data : resultCounter[0]
+    }
+  } catch (error) {
+    throw{
+      message: 'Error while counting activities',
+      error: error.message,
+      stack: error.stack
+    }
+  }
+}
 module.exports = {
   getData,
   insertData,
   searchData,
   deleteActivity,
   updateActivity,
+  countActivities
 };

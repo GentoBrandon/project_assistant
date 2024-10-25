@@ -75,10 +75,26 @@ const updateEmployee = async (body, id) => {
     return { success: false };
   }
 };
+
+const countEmployees = async ()=>{
+  try {
+    const countEmployee = await knex('employed').count('id');
+    if(!countEmployee){
+      return {success:false};
+    }
+    return {success:true, data:countEmployee};
+  } catch (error) {
+    throw{
+      msg: 'Error al contar los empleados',
+      stack:error.stack
+    }
+  }
+}
 module.exports = {
   insertData,
   getData,
   deleteEmployed,
   searchEmployed,
   updateEmployee,
+  countEmployees
 };
