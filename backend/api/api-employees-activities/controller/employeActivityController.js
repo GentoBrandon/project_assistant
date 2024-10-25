@@ -29,7 +29,7 @@ const getAllEmployeeActivities = async (req, res, next) => {
             error.status = 400
             throw error 
         }
-        return res.status(200).json({data: resultData.data})
+        return res.status(200).json(resultData.data)
     } catch (error) {
         next(error);
     }
