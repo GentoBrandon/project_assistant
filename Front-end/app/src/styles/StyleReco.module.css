@@ -1,0 +1,76 @@
+.containerRec {
+    height: 100vh;
+    background-image: url('/fondoRec.jpg');
+    background-size: cover;
+    background-attachment: fixed; /* Hace que la imagen se mantenga fija mientras se hace scroll */
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+  
+.BoxRec {
+    background-color: white;
+    padding: 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    max-width: 100%;
+  }
+.titleRec { /* Usar una clase en lugar de h1 directamente */
+    font-size: 30px;
+    margin-bottom: 45px;
+    color: #038824;
+    font-weight: bold; /* Añadir negrita */
+  }
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 20px;
+  }
+
+
+  .chatContainer {
+    margin-top: 20px;
+    text-align: left;
+    margin-left: 4%;
+    max-width: 60%; /* Limitar el ancho máximo de las burbujas */
+  }
+  
+  .chatBubble {
+    background-color: #25ff79; /* Verde suave como fondo */
+    border-radius: 20px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    position: relative;
+    margin-bottom: 15px; /* Separación entre mensajes */
+    font-size: 1rem; /* Tamaño de fuente */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    display: inline-block;
+    line-height: 1.5;
+  }
+  
+  /* Flecha en la burbuja */
+  .chatBubble:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px; /* Colocar la flecha a la izquierda */
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 20px solid #1dd865; /* Verde suave */
+    border-bottom: 10px solid transparent;
+  }
+  
+  .chatBubble p {
+    margin: 0; /* Eliminar márgenes dentro del texto */
+    color: #333; /* Color del texto */
+  }
+  
+  /* Personalización de emojis */
+  .chatBuble span {
+    font-size: 1.2rem; /* Tamaño de emojis */
+  }
+  

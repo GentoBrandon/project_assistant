@@ -2,6 +2,11 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
+import styles from '@/styles/StyleReco.module.css';
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
+
+
 
 export default function Home() {
   const [recognizedEmployee, setRecognizedEmployee] = useState(null);
@@ -144,6 +149,13 @@ export default function Home() {
         ]);
         const errorUtterance = new SpeechSynthesisUtterance('Error al guardar la actividad. Por favor, intenta nuevamente.');
         window.speechSynthesis.speak(errorUtterance);
+        toast.error(`Error: ${errorUtterance}`, {
+          duration: 1500,
+          progress: true,
+          position: "top-center",
+          transition: "bounceIn",
+          sonido: true,
+        });
         return;
       }
 
@@ -325,23 +337,33 @@ export default function Home() {
   };
 
   return (
-    <div style={{ textAlign: 'center', paddingTop: '50px' }}>
-      <h1>Reconocimiento Facial y Chat en Tiempo Real</h1>
+    <div className={styles.containerRec}>
+      <div className={styles.BoxRec}> 
+            <img
+              src="/logo-anacafe.webp"
+              alt="Anacafé Guatemala"
+              className={styles.logo}
+            />
+          <h1 className={styles.titleRec}>Asistente agricola</h1>
+          {recognizedEmployee && (
+            <div style={{ marginTop: '20px' }}>
+              <h2>Empleado Reconocido:</h2>
+              <p><strong>ID:</strong> {recognizedEmployee.employeeId}</p>
+              <p><strong>Nombre:</strong> {recognizedEmployee.employeeName}</p>
+            </div>
+          )}
 
-      {recognizedEmployee && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>Empleado Reconocido:</h2>
-          <p><strong>ID:</strong> {recognizedEmployee.employeeId}</p>
-          <p><strong>Nombre:</strong> {recognizedEmployee.employeeName}</p>
-        </div>
-      )}
+          {isListening && <p>Escuchando...</p>}
 
-      {isListening && <p>Escuchando...</p>}
+          <div className={styles.chatContainer}>
+            {chatHistory.map((message, index) => (
+              <div key={index} className={styles.chatBubble}>
+                <p>{message}</p>
+              </div>
+            ))}
+          </div>
 
-      <div style={{ marginTop: '20px', textAlign: 'left', marginLeft: '20%' }}>
-        {chatHistory.map((message, index) => (
-          <p key={index}>{message}</p>
-        ))}
+
       </div>
     </div>
   );
