@@ -1,25 +1,25 @@
-const {spawn}=require('child_process')
-const path = require('path');
 const employedModel = require('../models/employedModel');
+const {spawn} = require('child_process');
+const scriptFolder = 'D:\\Analisis ll\\ProyectoAsistans\\project_assistant\\reconigtion_assistant\\FaceRecognition2';
 const runPythonProcess = (script, args = []) => {
   return new Promise((resolve, reject) => {
-      const process = spawn('python', [script, ...args]);
+    const process = spawn('python', [`${scriptFolder}\\${script}`, ...args]);
 
-      process.stdout.on('data', (data) => {
-          console.log(`stdout: ${data}`);
-      });
+    process.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
 
-      process.stderr.on('data', (data) => {
-          console.error(`stderr: ${data}`);
-      });
+    process.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
 
-      process.on('close', (code) => {
-          if (code === 0) {
-              resolve();
-          } else {
-              reject(new Error(`Process exited with code ${code}`));
-          }
-      });
+    process.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Process exited with code ${code}`));
+      }
+    });
   });
 };
 const insertData = async (body) => {
@@ -27,19 +27,12 @@ const insertData = async (body) => {
     console.log('Ingresando');
     const result = await employedModel.insertData(body);
   
-  
     if (!result.success) {
       const error = new Error('Error al insertar');
       error.status = 400;
       throw error;
     }
-    console.log(result.id)
-     // Usa rutas absolutas para los scripts de Python
-     const captureScriptPath = path.resolve(__dirname, '../../../../recogniction-face/FaceRecognition2/capture.py');
-     const trainModelScriptPath = path.resolve(__dirname, '../../../../recogniction-face/FaceRecognition2/train_model.py');
- 
-     await runPythonProcess(captureScriptPath, [result.id.id]);
-     await runPythonProcess(trainModelScriptPath, []);
+
     console.log('Empleado Ingresado Ingresado');
     // Ejecutar el script de Python para capturar las fotos, pasando el ID del empleado
     await runPythonProcess('capture.py', [result.id.id]);
