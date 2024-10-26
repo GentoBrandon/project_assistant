@@ -20,9 +20,10 @@
 
 credentials.py
 node_modules
-employee_names.pny
+employee_names.npy
 modelo_reconocimiento.yml
 capture.py
+train_model.py
 # directorios #
 
 /__pycache__/*
