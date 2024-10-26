@@ -10,7 +10,8 @@ const protectedRoutes = [
   '/Tables/viewLots',
   '/Tables/viewActivities',
   '/Tables/viewSubActivities',
-  '/dashboard'
+  '/dashboard',
+  '/init-recognition'
 ];
 
 const dynamicRoutes = [
